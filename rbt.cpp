@@ -1,7 +1,28 @@
 #include "rbt.h"
 
+
+
 template<class T>
-node<T>::node(string color, T* item, node<T>* p, node<T>* r, node<T>* l){
+node<T>::node(){
+    key = NULL;
+    this->color = NULL;
+    this->p = NULL;
+    this->r = NULL;
+    this->l = NULL;
+}
+
+template<class T>
+node<T>::node(bool color){
+    key = NULL;
+    this->color = color;
+    this->p = NULL;
+    this->r = NULL;
+    this->l = NULL;
+}
+
+
+template<class T>
+node<T>::node(bool color, T* item, node<T>* p, node<T>* r, node<T>* l){
     *key = *item;
     this->color = color;
     this->p = p;
@@ -10,10 +31,14 @@ node<T>::node(string color, T* item, node<T>* p, node<T>* r, node<T>* l){
 }
 
 
+template<class T>
+rbt<T>::rbt(){
+  root = new node<T>(B);
+}
 
 template<class T>//default constructor #1
-rbt<T>::rbt(node<T>* n = NULL){
-    root = new node<T>(n->color, n->item, n->p, n->r, n->l);
+rbt<T>::rbt(node<T>* n){
+    root = new node<T>(n->color, n->key, n->p, n->r, n->l);
 }
 
 template<class T>//copy constructor #2
@@ -23,7 +48,7 @@ rbt<T>::rbt(const rbt<T> &tree){
 
 template<class T>//destructor
 rbt<T>::~rbt(){
-    destory(root);
+    //destory(root);
 }
 
 template<class T>
@@ -40,7 +65,7 @@ void rbt<T>::insert(T* item){
         y = x;                    //for the dictionary implementation, x->getKey() produces a NODE with key/value pairs.
         if(*item < *(x->key))     //if our current node's key is larger, go left of the tree
             x = x -> l;           //set x to left child
-        else 
+        else
             x = x -> r;           //set x to right child
     }
 
@@ -54,7 +79,6 @@ void rbt<T>::insert(T* item){
         y->l = z;                 //if y's key is bigger, z is the left child
     else
         y->r = z;                 //otherwise make z the right child
-
     z->l = NULL;
     z->r = NULL;
     z->color = R;
@@ -62,17 +86,80 @@ void rbt<T>::insert(T* item){
 }
 
 template<class T>
-void rbt<T>::rbt_insert_fix(node<T>* n){
-    while (n->p->color == R){
-        if (n->p == z->p->p->l){
+void rbt<T>::rbt_insert_fix(node<T>* z){
+    while (z->p->color == R){
+        if (z->p == z->p->p->l){
             node<T>* y = z->p->p->r;
             if (y->color == R){
-                
+                z->p->color = B;
+                y->color = B;
+                z->p->p->color = R;
+                z = z->p->p;
             }
-        }else{
-
-        }
+           else if(z == z->p->r){
+              z = z->p;
+              leftRotate(z);
+            }
+            z->p->color = B;
+            z->p->p->color = R;
+            rightRotate(z->p->p);
+          }
+        else{
+          node<T>* y = z->p->p->l;
+          if (y->color == R){
+              z->p->color = B;
+              y->color = B;
+              z->p->p->color = R;
+              z = z->p->p;
+          }
+         else if(z == z->p->l){
+            z = z->p;
+            rightRotate(z);
+            }
+          z->p->color = B;
+          z->p->p->color = R;
+          leftRotate(z->p->p);
+          }
     }
+    root->color = B;
+}
+
+template<class T>
+void rbt<T>::rightRotate(node<T> *x){
+  /*
+
+
+  */
+  node<T>* y = x->r;
+  x->r = y->l;
+  if(y->l != NULL)
+    y->l->p = x;
+  y->p = x->p;
+  if(x->p == NULL)
+    root = y;
+  else if(x == x->p->l)
+    x->p->l = y;
+  else
+    x->p->r = y;
+  y->l = x;
+  x->p = y;
+}
+
+template<class T>
+void rbt<T>::leftRotate(node<T> *x){
+  node<T>* y = x->l;
+  x->l = y->r;
+  if(y->r != NULL)
+    y->r->p = x;
+  y->p = x->p;
+  if(x->p == NULL)
+    root = y;
+  else if(x == x->p->r)
+    x->p->r = y;
+  else
+    x->p->l = y;
+  y->r = x;
+  x->p = y;
 }
 
 
@@ -84,9 +171,9 @@ void rbt<T>::deepCopy(node<T> *n) {
         Pre-condition: input n has to be not NULL.
    */
   if(n != NULL){
-    insert(new T(n->key));
-    deepCopy(n->getLeft());
-    deepCopy(n->getRight());
+    insert(n->key);
+    deepCopy(n->l);
+    deepCopy(n->r);
   }
 }
 
@@ -98,8 +185,8 @@ void rbt<T>::destroy(node<T> *n){
     Pre-condition: input n has to be not NULL.
   */
   if (n != NULL) {
-    destroy(n->getLeft()); //delete left and right nodes first
-    destroy(n->getRight());
+    destroy(n->l); //delete left and right nodes first
+    destroy(n->r);
     delete n;
   }
 }
