@@ -18,14 +18,14 @@ public:
     T* key;        //key for tree
     bool color;    //color value for node
     node<T> *p;    //pointer to the parent node
-    node<T> * r;   //pointer to the right child node
+    node<T> *r;    //pointer to the right child node
     node<T>* l;    //pointer to the left child node
 
     node();                               //default constructor #1          
-    node(bool color, T* key,              //constructor #2
-     node<T>* p, node<T>* r, node<T>* l);
+    node(bool color, T* key,              
+     node<T>* p, node<T>* r, node<T>* l); //constructor #2
     node(bool color);                     //constructor #3
-    // ~node();                              //destructor
+    ~node();                              //destructor
 
     string toStr() const;
     friend ostream& operator<<(ostream &o, node<T> &n){
@@ -49,7 +49,7 @@ public:
     bool empty() const;                          //returns true if empty
     T* get(T item) const;                        //returns the pointer to value
     void insert(T* item);                        //insert the item
-    void remove(T &item);                        //remove the item
+    // void remove(T &item);                        //remove the item
     T* max() const;                              //get the maximum item
     T* min() const;                              //get the minimum item
     T* succ() const;                             //get the successor
@@ -57,7 +57,8 @@ public:
     string inOrder() const;                      //in-order travelsal
     string preOrder() const;                     //pre-order travelsal
     string postOrder() const;                    //post-order travelsal
-    void operator=(rbt &tree);                   //assignment operator
+    void operator=(rbt<T> &tree);                //assignment operator
+    node<T>* getRoot() const;                    //returns the root
 
 protected:
     void rightRotate(node<T> *n);                //right rotate the tree   
