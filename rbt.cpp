@@ -1,17 +1,20 @@
 #include "rbt.h"
 
+/*
+  This is implementation file for rbt.h
+  Coded by Alistaire and Kaite.
+*/
 
-
-template<class T>
-node<T>::node(){
+template<class T>//default constructor #1
+node<T>::node(){ 
     key = NULL;
-    this->color = NULL;
+    // this->color = NULL;
     this->p = NULL;
     this->r = NULL;
     this->l = NULL;
 }
 
-template<class T>
+template<class T>//constructor #2
 node<T>::node(bool color){
     key = NULL;
     this->color = color;
@@ -20,35 +23,61 @@ node<T>::node(bool color){
     this->l = NULL;
 }
 
-
-template<class T>
+template<class T>//constructor #3
 node<T>::node(bool color, T* item, node<T>* p, node<T>* r, node<T>* l){
-    *key = *item;
+    *key = *item;        
     this->color = color;
     this->p = p;
     this->r = r;
     this->l = l;
 }
 
+// template<class T>//destructor
+// node<T>::~node(){
+//   delete key;
+// }
 
 template<class T>
+string node<T>::toStr() const{
+  /*
+    this function prints out node element.
+
+    Pre-Condition:node has to be not-null
+  */
+  string str = "" + to_string(*key) + "";
+  return str;
+}
+
+template<>
+string node<string>::toStr() const{
+  /*
+    this function prints out node element.
+    This is special overload for string function.
+
+    Pre-Condition:node has to be not-null
+  */
+  string str = "" + *key + "";
+  return str;
+}
+
+template<class T>//default constructor #1
 rbt<T>::rbt(){
   root = new node<T>(B);
 }
 
-template<class T>//default constructor #1
+template<class T>//constructor #2
 rbt<T>::rbt(node<T>* n){
     root = new node<T>(n->color, n->key, n->p, n->r, n->l);
 }
 
-template<class T>//copy constructor #2
+template<class T>//copy constructor #3
 rbt<T>::rbt(const rbt<T> &tree){
     deepCopy(root);
 }
 
 template<class T>//destructor
 rbt<T>::~rbt(){
-    //destory(root);
+    destory(root);
 }
 
 template<class T>
@@ -60,7 +89,6 @@ void rbt<T>::insert(T* item){
     */
     node<T> *x = root;            //set x to root
     node<T> *y = NULL;            //set y to null
-
     while(x != NULL) {            //in this case, we create the node inside of insert, but in the dictionary, we are inserting pairs
         y = x;                    //for the dictionary implementation, x->getKey() produces a NODE with key/value pairs.
         if(*item < *(x->key))     //if our current node's key is larger, go left of the tree
@@ -72,7 +100,6 @@ void rbt<T>::insert(T* item){
     node<T> *z = new node<T>();   //create new node with the desired key
     z->p = y;
     z->key = item;
-
     if(y == NULL)                 //the case that the tree is empty
         this->root = z;           //make z the new root
     else if(*(z->key) < *(y->key))
@@ -127,8 +154,10 @@ void rbt<T>::rbt_insert_fix(node<T>* z){
 template<class T>
 void rbt<T>::rightRotate(node<T> *x){
   /*
+      This function does right rotation of the tree
+      on the given node.
 
-
+      PreCondition: node x should not be null.
   */
   node<T>* y = x->r;
   x->r = y->l;
@@ -147,6 +176,12 @@ void rbt<T>::rightRotate(node<T> *x){
 
 template<class T>
 void rbt<T>::leftRotate(node<T> *x){
+  /*
+      This function does left rotation of the tree
+      on the given node.
+
+      PreCondition: node x should not be null.
+  */
   node<T>* y = x->l;
   x->l = y->r;
   if(y->r != NULL)

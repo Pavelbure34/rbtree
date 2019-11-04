@@ -8,22 +8,32 @@
 #include <string>
 using namespace std;
 
-#define R 1
-#define B 0
+//represeting red and black with boolean value
+#define R true     //true for red
+#define B false    //false for black
 
 template<class T>
 class node{
 public:
-    T* key;      //key for tree
-    bool color; //color value for node
-    node<T> *p;   //pointer to the parent node
-    node<T> * r;  //pointer to the right child node
+    T* key;        //key for tree
+    bool color;    //color value for node
+    node<T> *p;    //pointer to the parent node
+    node<T> * r;   //pointer to the right child node
     node<T>* l;    //pointer to the left child node
-    node();
-    node(bool color, T* key, node<T>* p, node<T>* r, node<T>* l);
-    node(bool color);
-};
 
+    node();                               //default constructor #1          
+    node(bool color, T* key,              //constructor #2
+     node<T>* p, node<T>* r, node<T>* l);
+    node(bool color);                     //constructor #3
+    // ~node();                              //destructor
+
+    string toStr() const;
+    friend ostream& operator<<(ostream &o, node<T> &n){
+        //this friend function enables osteam operator.
+        o << n.toStr();
+        return o;
+    }
+};
 
 template<class T>
 class rbt{
@@ -50,19 +60,16 @@ public:
     void operator=(rbt &tree);                   //assignment operator
 
 protected:
-    void rightRotate(node<T> *n);
-    void leftRotate(node<T> *n);
-
-    void transplant(node<T> *u, node<T> *v);
-    string getInOrder(node<T> *x) const;
+    void rightRotate(node<T> *n);                //right rotate the tree   
+    void leftRotate(node<T> *n);                 //left rotate the tree
+    void rbt_transplant(node<T> *u, node<T> *v); //transplant tree
+    string getInOrder(node<T> *x) const;         //helper function for walks 
     string getPreOrder(node<T> *x) const;
     string getPostOrder(node<T> *x) const;
-    void destroy(node<T> *n);
-    void deepCopy(node<T> *n);
-    node<T>* getNode(node<T> *n, T key) const;
-    void rbt_insert_fix(node<T>* n);
-
+    void destroy(node<T> *n);                    //helper function for clearing memory.
+    void deepCopy(node<T> *n);                   //helper function for copy
+    node<T>* getNode(node<T> *n, T key) const;   //returning target node.
+    void rbt_insert_fix(node<T>* n);             //helper function for insert
 };
-
 #include "rbt.cpp"
 #endif
