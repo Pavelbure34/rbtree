@@ -6,6 +6,7 @@
 */
 #include <iostream>
 #include <string>
+#include "exceptions.h"
 using namespace std;
 
 //represeting red and black with boolean value
@@ -48,32 +49,32 @@ public:
     void insert(T* item);                        //insert the item
     // void remove(T &item);                        //remove the item
 
-    T* max() const;                              //get the maximum item
-    T* min() const;                              //get the minimum item
-    T* succ() const;                             //get the successor
-    T* predec() const;                           //get the predecessor
+    T* succ(T* key) const;                        //get the successor
+    T* predec(T* key) const;                      //get the predecessor
 
     string inOrder() const;                      //in-order travelsal
     string preOrder() const;                     //pre-order travelsal
     string postOrder() const;                    //post-order travelsal
-    
+
     void operator=(rbt<T> &tree);                //assignment operator
     node<T>* getRoot() const;                    //returns the root
 
 protected:
-    void insert_fix(node<T>* n);                 //helper function for insert
-    void rightRotate(node<T> *n);                //right rotate the tree   
-    void leftRotate(node<T> *n);                 //left rotate the tree
-    void rbt_transplant(node<T> *u, node<T> *v); //transplant tree
+    void insert_fix(node<T>* n);                   //helper function for insert
+    void rightRotate(node<T> *n);                  //right rotate the tree   
+    void leftRotate(node<T> *n);                   //left rotate the tree
+    void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
 
-    string getInOrder(node<T> *x) const;         //helper function for walks 
+    T* max(node<T>* n) const;                      //get the maximum item
+    T* min(node<T>* n) const;                      //get the minimum item
+
+    string getInOrder(node<T> *x) const;           //helper function for walks 
     string getPreOrder(node<T> *x) const;
     string getPostOrder(node<T> *x) const;
 
-    void destroy(node<T> *n);                    //helper function for clearing memory.
-    void deepCopy(node<T> *n);                   //helper function for copy
-    node<T>* getNode(node<T> *n, T key) const;   //returning target node.
-   
+    void destroy(node<T> *n);                     //helper function for clearing memory.
+    void deepCopy(node<T> *n);                    //helper function for copy
+    node<T>* getNode(node<T>* n, T* key) const;//returning target node.
 };
 #include "rbt.cpp"
 #endif

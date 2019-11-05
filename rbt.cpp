@@ -89,7 +89,6 @@ void rbt<T>::insert(T* item){
         this function insert the item inside.
         Precondition: tree has to be initialized.
     */
-    
     node<T>* y = NULL;             //set y to NULL
     node<T>* x = root;             //set x to root
     while (x != NULL){
@@ -102,14 +101,15 @@ void rbt<T>::insert(T* item){
     
     node<T>* z = new node<T>(item, y, NULL, NULL); //setting up new node z
     z->colour = R;
-    if (y == NULL)                              //if empty tree
-      root = z;                                 //z is root
-    else if (*item < *(y->key))             //if item smaller than root
-      y->l = z;                                 //left tree
-    else                                        //if bigger
-      y->r = z;                                 //right tree
-    insert_fix(z);                              //fix up colour of tree
-    cout << 1 << endl;
+    if (y == NULL)                                 //if empty tree
+      root = z;                                    //z is root
+    else if (*item < *(y->key))                    //if item smaller than root
+      y->l = z;                                    //left tree
+    else                                           //if bigger
+      y->r = z;                                    //right tree
+    cout << "here" << endl;
+    insert_fix(z);                                 //fix up colour of tree
+    cout << "test" << endl;
 }
 
 template<class T>
@@ -120,13 +120,11 @@ void rbt<T>::insert_fix(node<T> *n){
 
     PreCondition: input node z should not be null.
   */
-  if (n->p != NULL)
-    cout << "1" << endl;
+  if (n->p != NULL){
     while (n->p->colour == R){ //if not root node
       node<T>* y;
       if (n->p == n->p->p->l){
         y = n->p->p->r;
-        cout << "a" << endl;
         if (y->colour == R){
           n->p->colour = B;
           y->colour = B;
@@ -136,18 +134,19 @@ void rbt<T>::insert_fix(node<T> *n){
           n = n->p;
           leftRotate(n);
         }
-        cout << "c" << endl;
         n->p->colour = B;
         n->p->p->colour = R;
-        rightRotate(n);
+        rightRotate(n->p->p);
       }else{
+        cout << 2 << endl;
         y = n->p->p->l;
-        if (n->colour == R){
+        cout << (n == NULL) << endl;
+        cout << (y == NULL) << endl;
+        if (y->colour == R){//cannot get colour from null
           n->p->colour = B;
           y->colour = B;
           cout << "f" << endl;
-          n->p->p->colour = R;//
-          
+          n->p->p->colour = R;
           n = n->p->p;
         }else if (n == n->p->l){
           n = n->p;
@@ -158,10 +157,11 @@ void rbt<T>::insert_fix(node<T> *n){
         cout << "d" << endl;
         n->p->colour = B;
         n->p->p->colour = R;
-        leftRotate(n);
+        leftRotate(n->p->p);
       }
     }
-  root->colour = B;                     //if root node
+  }
+  root->colour = B;//change root node colour to black
 }
 
 template<class T>
@@ -267,4 +267,105 @@ void rbt<T>::destroy(node<T> *n){
     destroy(n->r);
     delete n;
   }
+}
+
+template<class T>
+T* rbt<T>::min(node<T>* n) const{
+  /*
+    this function gets minimum value from the given node.
+    Pre-condition: input n should not be null
+  */
+  if(root == NULL)
+    throw new emptyTreeException;
+
+  node<T> *temp = n;
+  while(temp->l != NULL) { //go as far left as possible
+    temp = temp->l;
+  }
+  return temp->key;
+}
+
+template<class T>
+T* rbt<T>::max(node<T>* n) const{
+  /*
+    this function gets maximum value from the given node.
+    Pre-condition: input n should not be null
+  */
+  if(root == NULL)
+    throw new emptyTreeException;
+
+  node<T> *temp = n;
+  while(temp->r != NULL) { //go as far left as possible
+    temp = temp->r;
+  }
+  return temp->key;
+}
+
+template<class T>
+T* rbt<T>::succ(T* key) const{
+  /*
+    this function gets successor from the given value.
+    Pre-condition: input key should not be null
+  */
+  node<T> *x = getNode(root, key);
+  if(x == NULL) {
+    throw new noKeyException; 
+  }
+  if(x->r != NULL) {
+    return min(x->r); //get min
+  }
+
+  node<T> *y = x->p;
+  while(y != NULL && x == y->r){
+    x = y;
+    y = y->p; //advance upwards
+  }
+
+  if(y == NULL) {
+    throw new KeyError;
+  }
+  return y->key;
+}
+
+template<class T>
+T* rbt<T>::predec(T* key) const{
+   /*
+    this function gets predecessor from the given value.
+    Pre-condition: input key should not be null
+  */
+  node<T> *x = getNode(root, key);
+  if(x == NULL) {
+    throw new noKeyException; 
+  }
+  if(x->l != NULL) {
+    return max(x->l); //get min
+  }
+
+  node<T> *y = x->p;
+  while(y != NULL && x == y->l){
+    x = y;
+    y = y->p; //advance upwards
+  }
+
+  if(y == NULL) {
+    throw new KeyError;
+  }
+  return y->key;
+}
+
+template<class T>
+node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
+  /*
+    this function recursively finds target node
+    that contains argument key.
+
+    Precondition: key should not null.
+  */
+  while(n != NULL && *key != *(n->key)){
+    if(*(n->key) < *key)
+      n = n->r;
+    else 
+      n = n->l;
+  }
+  return n;
 }

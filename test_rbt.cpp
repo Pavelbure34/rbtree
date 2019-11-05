@@ -72,11 +72,13 @@ void test_node_constructors_toStr(){
 
 template<class T>
 void test_rbt_insert(rbt<T> &tree, T* a, T* b, T* c){
+  cout << *a << endl;
   tree.insert(a);           //testing insert with empty tree
+  cout << *b << endl;
   tree.insert(b);           //testing insert with non empty tree
-  tree.insert(c);
-  cout << 1 << endl;
-  assert(!tree.empty());    //it should not insert
+  cout << *c << endl;
+  tree.insert(c);           //inserting elememnt smaller than b
+  assert(!tree.empty());    //it should not empty
 }
 
 template<class T>
@@ -102,66 +104,66 @@ int main(int argc, char const *argv[]) {
   LOG1("RBT class test init");
   LOG1("----------------------------------------");
 
-  LOG2("(1) node constructor, destructor and toStr:");
-  test_node_constructors_toStr();
-  LOG1(" passed");
+  // LOG2("(1) node constructor, destructor and toStr:");
+  // test_node_constructors_toStr();
+  // LOG1(" passed");
 
-  LOG2("(2) bt default constructor:");
+  // LOG2("(2) bt default constructor:");
   rbt<int> it;          //testing default constructor
-  rbt<double> dt;
-  rbt<float> ft;
-  rbt<char> ct;
-  rbt<string> st;
-  LOG1(" passed");
+  // rbt<double> dt;
+  // rbt<float> ft;
+  // rbt<char> ct;
+  // rbt<string> st;
+  // LOG1(" passed");
 
-  LOG2("(3) rbt copy constructor on empty tree:");
-  rbt<int> it1(it);          //testing copy constructor with empty
-  rbt<double> dt1(dt);
-  rbt<float> ft1(ft);
-  rbt<char> ct1(ct);
-  rbt<string> st1(st);
+  // LOG2("(3) rbt copy constructor on empty tree:");
+  // rbt<int> it1(it);          //testing copy constructor with empty
+  // rbt<double> dt1(dt);
+  // rbt<float> ft1(ft);
+  // rbt<char> ct1(ct);
+  // rbt<string> st1(st);
 
-  assert(it.empty() == it1.empty());
-  assert(dt.empty() == dt1.empty());
-  assert(ft.empty() == ft1.empty());
-  assert(ct.empty() == ct1.empty());
-  assert(st.empty() == st1.empty());
-  LOG1("passed");
+  // assert(it.empty() == it1.empty());
+  // assert(dt.empty() == dt1.empty());
+  // assert(ft.empty() == ft1.empty());
+  // assert(ct.empty() == ct1.empty());
+  // assert(st.empty() == st1.empty());
+  // LOG1("passed");
 
-  LOG2("(4) rbt copy assignment operator with emptyTree:");
-  test_rbt_assingment(it, it);
-  test_rbt_assingment(dt, dt);
-  test_rbt_assingment(ft, ft);
-  test_rbt_assingment(ct, ct);
-  test_rbt_assingment(st, st);
-  LOG1(" passed");
-  LOG1("(5) rbt empty: passed"); //reaching here, empty works.
+  // LOG2("(4) rbt copy assignment operator with emptyTree:");
+  // test_rbt_assingment(it, it);
+  // test_rbt_assingment(dt, dt);
+  // test_rbt_assingment(ft, ft);
+  // test_rbt_assingment(ct, ct);
+  // test_rbt_assingment(st, st);
+  // LOG1(" passed");
+  // LOG1("(5) rbt empty: passed"); //reaching here, empty works.
 
-  LOG2("(6) rbt insert:");
+  // LOG2("(6) rbt insert:");
   test_rbt_insert(it, new int(10), new int(15),new int(12));
-  test_rbt_insert(dt, new double(10.0), new double(15.0), new double(12.0));
-  test_rbt_insert(ft, new float(10.0f), new float(15.0f), new float(12.0f));
-  test_rbt_insert(ct, new char('a'), new char('c'), new char('b'));
-  test_rbt_insert(st, new string("hello"), new string("lo"), new string("Hel"));
-  LOG1(" passed");
+  // test_rbt_insert(dt, new double(10.0), new double(15.0), new double(12.0));
+  // test_rbt_insert(ft, new float(10.0f), new float(15.0f), new float(12.0f));
+  // test_rbt_insert(ct, new char('a'), new char('c'), new char('b'));
+  // test_rbt_insert(st, new string("hello"), new string("lo"), new string("Hel"));
+  // LOG1(" passed");
 
-  LOG2("(7) rbt copy constructor with non-emptyTree:");
-  rbt<int> it2(it);          
-  rbt<double> dt2(dt);
-  rbt<float> ft2(ft);
-  rbt<char> ct2(ct);
-  rbt<string> st2(st);
-  assert(!it2.empty());
-  assert(!dt2.empty());
-  assert(!ft2.empty());
-  assert(!ct2.empty());
-  assert(!st2.empty());
-  LOG1(" passed");
+  // LOG2("(7) rbt copy constructor with non-emptyTree:");
+  // rbt<int> it2(it);          
+  // rbt<double> dt2(dt);
+  // rbt<float> ft2(ft);
+  // rbt<char> ct2(ct);
+  // rbt<string> st2(st);
+  // assert(!it2.empty());
+  // assert(!dt2.empty());
+  // assert(!ft2.empty());
+  // assert(!ct2.empty());
+  // assert(!st2.empty());
+  // LOG1(" passed");
 
-  //reaching here, insert_fix, rotate functions have working fine.
-  LOG2("(8) rbt insert_fix: passed");
-  LOG2("(9) rbt leftRotate: passed");
-  LOG2("(10) rbt rightRotate: passed");
+  // //reaching here, insert_fix, rotate functions have working fine.
+  // LOG2("(8) rbt insert_fix: passed");
+  // LOG2("(9) rbt leftRotate: passed");
+  // LOG2("(10) rbt rightRotate: passed");
 
   // LOG2("rbt copy assignment operator with non-emptyTree:");
   // test_rbt_assingment(it1, it);
