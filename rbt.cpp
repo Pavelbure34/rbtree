@@ -89,34 +89,27 @@ void rbt<T>::insert(T* item){
         this function insert the item inside.
         Precondition: tree has to be initialized.
     */
+    
     node<T>* y = NULL;             //set y to NULL
     node<T>* x = root;             //set x to root
-    node<T>* z = new node<T>(item, y, NULL, NULL); //setting up new node z
-    z->colour = R;
     while (x != NULL){
-      cout << "a" << endl;
       y = x;
-      if (*(z->key) < *(x->key))
+      if (*item < *(x->key))
         x = x->l;
       else
         x = x->r;
     }
-
-    x->p = y;
-    cout << 1 << endl;
-    if (y == NULL){                              //if empty tree
-      cout << 2 << endl;
+    
+    node<T>* z = new node<T>(item, y, NULL, NULL); //setting up new node z
+    z->colour = R;
+    if (y == NULL)                              //if empty tree
       root = z;                                 //z is root
-    }else if (*(z->key) < *(y->key)){             //if item smaller than root
-      cout << 3 << endl;
+    else if (*item < *(y->key))             //if item smaller than root
       y->l = z;                                 //left tree
-    }else{                                        //if bigger
-      cout << 4 << endl;
+    else                                        //if bigger
       y->r = z;                                 //right tree
-    }
-    cout << 5 << endl;
-    insert_fix(z);                               //fix up colour of tree
-    cout << 6 << endl;
+    insert_fix(z);                              //fix up colour of tree
+    cout << 1 << endl;
 }
 
 template<class T>
@@ -127,40 +120,48 @@ void rbt<T>::insert_fix(node<T> *n){
 
     PreCondition: input node z should not be null.
   */
-  while (n->p->colour == R){
-    node<T>* y;
-    if (n->p == n->p->p->l){
-      y = n->p->p->r;
-      if (y->colour == R){
+  if (n->p != NULL)
+    cout << "1" << endl;
+    while (n->p->colour == R){ //if not root node
+      node<T>* y;
+      if (n->p == n->p->p->l){
+        y = n->p->p->r;
+        cout << "a" << endl;
+        if (y->colour == R){
+          n->p->colour = B;
+          y->colour = B;
+          n->p->p->colour = R;
+          n = n->p->p;
+        }else if (n == n->p->r){
+          n = n->p;
+          leftRotate(n);
+        }
+        cout << "c" << endl;
         n->p->colour = B;
-        y->colour = B;
         n->p->p->colour = R;
-        n = n->p->p;
-      }else if (n == n->p->r){
-        n = n->p;
+        rightRotate(n);
+      }else{
+        y = n->p->p->l;
+        if (n->colour == R){
+          n->p->colour = B;
+          y->colour = B;
+          cout << "f" << endl;
+          n->p->p->colour = R;//
+          
+          n = n->p->p;
+        }else if (n == n->p->l){
+          n = n->p;
+          cout << "e" << endl;
+          rightRotate(n);
+          cout << "g" << endl;
+        }
+        cout << "d" << endl;
+        n->p->colour = B;
+        n->p->p->colour = R;
         leftRotate(n);
       }
-      n->p->colour = B;
-      n->p->p->colour = R;
-      rightRotate(n);
-    }else{
-      y = n->p->p->l;
-      if (n->colour == R){
-        n->p->colour = B;
-        y->colour = B;
-        n->p->p->colour = R;
-        n = n->p->p;
-      }else if (n == n->p->l){
-        n = n->p;
-        rightRotate(n);
-      }
-      n->p->colour = B;
-      n->p->p->colour = R;
-      leftRotate(n);
     }
-  }
-
-  root->colour = B;  
+  root->colour = B;                     //if root node
 }
 
 template<class T>
