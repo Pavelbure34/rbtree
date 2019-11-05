@@ -5,28 +5,12 @@
   Coded by Alistaire and Kaite.
 */
 
-template<class T>//default constructor #1
-node<T>::node(){ 
-    key = NULL;
-    this->color = NULL;
-    this->p = NULL;
-    this->r = NULL;
-    this->l = NULL;
-}
-
-template<class T>//constructor #2
-node<T>::node(bool color){
-    key = NULL;
-    this->color = color;
-    this->p = NULL;
-    this->r = NULL;
-    this->l = NULL;
-}
-
 template<class T>//constructor #3
-node<T>::node(bool color, T* item, node<T>* p, node<T>* r, node<T>* l){
-    key = new T(*item);        
-    this->color = color;
+node<T>::node(T* item, node<T>* p, node<T>* r, node<T>* l){
+    if (item != NULL)
+      key = new T(*item);
+    else
+      key = NULL;
     this->p = p;
     this->r = r;
     this->l = l;
@@ -34,7 +18,8 @@ node<T>::node(bool color, T* item, node<T>* p, node<T>* r, node<T>* l){
 
 template<class T>//destructor
 node<T>::~node(){
-  delete key;
+  if (key != NULL)
+    delete key;
 }
 
 template<class T>
@@ -44,7 +29,7 @@ string node<T>::toStr() const{
 
     Pre-Condition:node has to be not-null
   */
-  string str = "" + to_string(*key) + "";
+  string str = (key != NULL)?"" + to_string(*key):"";
   return str;
 }
 
@@ -56,21 +41,28 @@ string node<string>::toStr() const{
 
     Pre-Condition:node has to be not-null
   */
-  string str = "" + *key + "";
+  string str = (key != NULL)?"" + *key:"";
   return str;
 }
 
 template<class T>//default constructor #1
-rbt<T>::rbt(){}
-
-template<class T>//constructor #2
-rbt<T>::rbt(node<T>* n){
-    root = new node<T>(n->color, n->key, n->p, n->r, n->l);
+rbt<T>::rbt(){
+  root = NULL;  //initiating tree
 }
 
 template<class T>//copy constructor #3
 rbt<T>::rbt(const rbt<T> &tree){
-    deepCopy(root);
+  root = NULL;              //initiating tree
+  deepCopy(tree.getRoot()); //recursively coping node by node
+}
+
+template<class T>
+void rbt<T>::operator=(rbt<T> &tree){
+  /*
+    this operator rewrites the tree.
+  */
+  destroy(root);
+  deepCopy(tree.getRoot());
 }
 
 template<class T>//destructor
@@ -83,7 +75,7 @@ bool rbt<T>::empty() const{
   /*
     this function checks if rbt is empty or not.
   */
-  return root->toStr() == "";
+  return root == NULL;
 }
 
 template<class T>
@@ -95,100 +87,126 @@ template<class T>
 void rbt<T>::insert(T* item){
     /*
         this function insert the item inside.
-
         Precondition: tree has to be initialized.
     */
-    node<T> *x = root;            //set x to root
-    node<T> *y = NULL;            //set y to null
-    while(x != NULL) {            //in this case, we create the node inside of insert, but in the dictionary, we are inserting pairs
-        y = x;                    //for the dictionary implementation, x->getKey() produces a NODE with key/value pairs.
-        if(*item < *(x->key))     //if our current node's key is larger, go left of the tree
-            x = x -> l;           //set x to left child
-        else
-            x = x -> r;           //set x to right child
+    node<T>* y = NULL;             //set y to NULL
+    node<T>* x = root;             //set x to root
+    node<T>* z = new node<T>(item, y, NULL, NULL); //setting up new node z
+    z->colour = R;
+    while (x != NULL){
+      cout << "a" << endl;
+      y = x;
+      if (*(z->key) < *(x->key))
+        x = x->l;
+      else
+        x = x->r;
     }
 
-    node<T> *z = new node<T>();   //create new node with the desired key
-    z->p = y;
-    z->key = item;
-    if(y == NULL)                 //the case that the tree is empty
-        this->root = z;           //make z the new root
-    else if(*(z->key) < *(y->key))
-        y->l = z;                 //if y's key is bigger, z is the left child
-    else
-        y->r = z;                 //otherwise make z the right child
-    z->l = NULL;
-    z->r = NULL;
-    z->color = R;
-    rbt_insert_fix(z);            //fix up the color of nodes
+    x->p = y;
+    cout << 1 << endl;
+    if (y == NULL){                              //if empty tree
+      cout << 2 << endl;
+      root = z;                                 //z is root
+    }else if (*(z->key) < *(y->key)){             //if item smaller than root
+      cout << 3 << endl;
+      y->l = z;                                 //left tree
+    }else{                                        //if bigger
+      cout << 4 << endl;
+      y->r = z;                                 //right tree
+    }
+    cout << 5 << endl;
+    insert_fix(z);                               //fix up colour of tree
+    cout << 6 << endl;
 }
 
 template<class T>
-void rbt<T>::rbt_insert_fix(node<T>* z){
-    /*
-      this function fixes up the color of node
-      in order to keep the properties of red black tree.
+void rbt<T>::insert_fix(node<T> *n){
+  /*
+    this function fixes up the color of node
+    in order to keep the properties of red black tree.
 
-      PreCondition: input node z should not be null.
-    */
-    while (z->p->color == R){
-        if (z->p == z->p->p->l){
-            node<T>* y = z->p->p->r;
-            if (y->color == R){
-                z->p->color = B;
-                y->color = B;
-                z->p->p->color = R;
-                z = z->p->p;
-            }
-           else if(z == z->p->r){
-              z = z->p;
-              leftRotate(z);
-            }
-            z->p->color = B;
-            z->p->p->color = R;
-            rightRotate(z->p->p);
-          }
-        else{
-          node<T>* y = z->p->p->l;
-          if (y->color == R){
-              z->p->color = B;
-              y->color = B;
-              z->p->p->color = R;
-              z = z->p->p;
-          }
-         else if(z == z->p->l){
-            z = z->p;
-            rightRotate(z);
-            }
-          z->p->color = B;
-          z->p->p->color = R;
-          leftRotate(z->p->p);
-        }
+    PreCondition: input node z should not be null.
+  */
+  while (n->p->colour == R){
+    node<T>* y;
+    if (n->p == n->p->p->l){
+      y = n->p->p->r;
+      if (y->colour == R){
+        n->p->colour = B;
+        y->colour = B;
+        n->p->p->colour = R;
+        n = n->p->p;
+      }else if (n == n->p->r){
+        n = n->p;
+        leftRotate(n);
+      }
+      n->p->colour = B;
+      n->p->p->colour = R;
+      rightRotate(n);
+    }else{
+      y = n->p->p->l;
+      if (n->colour == R){
+        n->p->colour = B;
+        y->colour = B;
+        n->p->p->colour = R;
+        n = n->p->p;
+      }else if (n == n->p->l){
+        n = n->p;
+        rightRotate(n);
+      }
+      n->p->colour = B;
+      n->p->p->colour = R;
+      leftRotate(n);
     }
-    root->color = B;
+  }
+
+  root->colour = B;  
 }
 
 template<class T>
-void rbt<T>::rightRotate(node<T> *x){
+void rbt<T>::rightRotate(node<T> *n){
   /*
       This function does right rotation of the tree
       on the given node.
 
+      PreCondition: node n should not be null.
+  */
+  node<T>* y = n->l;   //setting y with right child of x
+  n->l = y->r;         //turn x right subtree of y into y leftt subtree
+  if(y->r != NULL)
+    y->r->p = n;
+  y->p = n->p;         //link parent of x to y's
+  if(n->p == NULL)
+    root = y;
+  else if(n == n->p->r)
+    n->p->r = y;
+  else
+    n->p->l = y;
+  y->r = n;            //put x on y's right.
+  n->p = y;
+}
+
+template<class T>
+void rbt<T>::leftRotate(node<T> *n){
+  /*
+      This function does left rotation of the tree
+      on the given node.
+
       PreCondition: node x should not be null.
   */
-  node<T>* y = x->r;   //setting y with right child of x
-  x->r = y->l;         //turn x right subtree of y into y leftt subtree
-  if(y->l != NULL)
-    y->l->p = x;
-  y->p = x->p;         //link parent of x to y's
-  if(x->p == NULL)
+  node<T>* y = n->r;  //setting y with left child of x
+  n->r = y->l;        //turn left subtree of y into x right subtree
+  if(y->l != NULL)    
+    y->l->p = n;
+  y->p = n->p;        //link parent of x to y's
+  if(n->p == NULL)
     root = y;
-  else if(x == x->p->l)
-    x->p->l = y;
+  else if(n == n->p->l)
+    n->p->l = y;
   else
-    x->p->r = y;
-  y->l = x;            //put x on y's right.
-  x->p = y;
+    n->p->r = y;
+  y->l = n;           //put x on y's left.
+  n->p = y;
 }
 
 template<class T>
@@ -211,38 +229,6 @@ void rbt<T>::rbt_transplant(node<T> *u, node<T> *v){
 // void rbt<T>::remove(T &item){
   
 // }
-
-template<class T>
-void rbt<T>::leftRotate(node<T> *x){
-  /*
-      This function does left rotation of the tree
-      on the given node.
-
-      PreCondition: node x should not be null.
-  */
-  node<T>* y = x->l;  //setting y with left child of x
-  x->l = y->r;        //turn left subtree of y into x right subtree
-  if(y->r != NULL)    
-    y->r->p = x;
-  y->p = x->p;        //link parent of x to y's
-  if(x->p == NULL)
-    root = y;
-  else if(x == x->p->r)
-    x->p->r = y;
-  else
-    x->p->l = y;
-  y->r = x;           //put x on y's left.
-  x->p = y;
-}
-
-template<class T>
-void rbt<T>::operator=(rbt<T> &tree){
-  /*
-    this operator rewrites the tree.
-  */
-  destroy(root);
-  deepCopy(tree.getRoot());
-}
 
 template<class T>
 node<T>* rbt<T>::getRoot() const{
