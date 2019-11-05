@@ -9,7 +9,7 @@
 */
 
 void test_node_constructors_toStr(){
-  //testing constructor with no argument  
+  //testing constructor with no argument
   node<int> in;                                  //dummy for parent node
   node<double> dn;
   node<float> fn;
@@ -49,7 +49,7 @@ void test_node_constructors_toStr(){
   cn3.colour = B;
   node<string> sn3(new string("hello world!"), NULL, &sn1, &sn);
   sn3.colour = R;
-  
+
   //testing toStr method
   assert(in.toStr() == "");
   assert(dn.toStr() == "");
@@ -70,6 +70,26 @@ void test_node_constructors_toStr(){
   //if no error, detstructor has been working fine at this point.
 }
 
+void test_rbt_constructors(){
+  rbt<int> it;
+  rbt<double> dt;
+  rbt<float> ft;
+  rbt<char> ct;
+  rbt<string> st;
+
+  rbt<int> it1(it);          //testing copy constructor with empty
+  rbt<double> dt1(dt);
+  rbt<float> ft1(ft);
+  rbt<char> ct1(ct);
+  rbt<string> st1(st);
+
+  assert(it.empty() == it1.empty());
+  assert(dt.empty() == dt1.empty());
+  assert(ft.empty() == ft1.empty());
+  assert(ct.empty() == ct1.empty());
+  assert(st.empty() == st1.empty());
+}
+
 template<class T>
 void test_rbt_insert(rbt<T> &tree, T* a, T* b, T* c){
   cout << *a << endl;
@@ -79,6 +99,18 @@ void test_rbt_insert(rbt<T> &tree, T* a, T* b, T* c){
   cout << *c << endl;
   tree.insert(c);           //inserting elememnt smaller than b
   assert(!tree.empty());    //it should not empty
+}
+
+
+void test_insert(){
+  rbt<int> tree;
+  assert(tree.empty() == 1);
+  int a = 10;
+  int * b = new int;
+  *b = a;
+  tree.insert(b);
+
+  
 }
 
 template<class T>
@@ -92,7 +124,7 @@ void test_rbt_assingment(rbt<T> &a, rbt<T> &b){
 
 template<class T>
 void test_rbt_get(rbt<T> &tree, T a, T b){
-  
+
 }
 
 template<class T>
@@ -104,43 +136,36 @@ int main(int argc, char const *argv[]) {
   LOG1("RBT class test init");
   LOG1("----------------------------------------");
 
-  // LOG2("(1) node constructor, destructor and toStr:");
-  // test_node_constructors_toStr();
-  // LOG1(" passed");
+  LOG2("(1) node constructor, destructor and toStr:");
+  test_node_constructors_toStr();
+  LOG1(" passed");
 
-  // LOG2("(2) bt default constructor:");
-  rbt<int> it;          //testing default constructor
-  // rbt<double> dt;
-  // rbt<float> ft;
-  // rbt<char> ct;
-  // rbt<string> st;
-  // LOG1(" passed");
+  test_rbt_constructors();
+  rbt<int> it;
+  rbt<double> dt;
+  rbt<float> ft;
+  rbt<char> ct;
+  rbt<string> st;
 
-  // LOG2("(3) rbt copy constructor on empty tree:");
-  // rbt<int> it1(it);          //testing copy constructor with empty
-  // rbt<double> dt1(dt);
-  // rbt<float> ft1(ft);
-  // rbt<char> ct1(ct);
-  // rbt<string> st1(st);
+  rbt<int> it1(it);          //testing copy constructor with empty
+  rbt<double> dt1(dt);
+  rbt<float> ft1(ft);
+  rbt<char> ct1(ct);
+  rbt<string> st1(st);
 
-  // assert(it.empty() == it1.empty());
-  // assert(dt.empty() == dt1.empty());
-  // assert(ft.empty() == ft1.empty());
-  // assert(ct.empty() == ct1.empty());
-  // assert(st.empty() == st1.empty());
-  // LOG1("passed");
 
-  // LOG2("(4) rbt copy assignment operator with emptyTree:");
-  // test_rbt_assingment(it, it);
-  // test_rbt_assingment(dt, dt);
-  // test_rbt_assingment(ft, ft);
-  // test_rbt_assingment(ct, ct);
-  // test_rbt_assingment(st, st);
-  // LOG1(" passed");
-  // LOG1("(5) rbt empty: passed"); //reaching here, empty works.
+  LOG2("(4) rbt copy assignment operator with emptyTree:");
+  test_rbt_assingment(it, it);
+  test_rbt_assingment(dt, dt);
+  test_rbt_assingment(ft, ft);
+  test_rbt_assingment(ct, ct);
+  test_rbt_assingment(st, st);
+  LOG1(" passed");
+  LOG1("(5) rbt empty: passed"); //reaching here, empty works.
 
-  // LOG2("(6) rbt insert:");
-  test_rbt_insert(it, new int(10), new int(15),new int(12));
+  LOG2("(6) rbt insert:");
+  test_insert();
+  //test_rbt_insert(it, new int(10), new int(15),new int(12));
   // test_rbt_insert(dt, new double(10.0), new double(15.0), new double(12.0));
   // test_rbt_insert(ft, new float(10.0f), new float(15.0f), new float(12.0f));
   // test_rbt_insert(ct, new char('a'), new char('c'), new char('b'));
@@ -148,7 +173,7 @@ int main(int argc, char const *argv[]) {
   // LOG1(" passed");
 
   // LOG2("(7) rbt copy constructor with non-emptyTree:");
-  // rbt<int> it2(it);          
+  // rbt<int> it2(it);
   // rbt<double> dt2(dt);
   // rbt<float> ft2(ft);
   // rbt<char> ct2(ct);
@@ -175,7 +200,7 @@ int main(int argc, char const *argv[]) {
 
   // LOG2("rbt get:");
   // LOG1("passed");
-  
+
   LOG1("----------------------------------------");
   LOG1("RBT class test complete");
   return 0;

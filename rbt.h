@@ -14,7 +14,7 @@ using namespace std;
 #define B false    //false for black
 
 template<class T>
-class node{
+class node{ 
 public:
     T* key;        //pointer to key for tree
     bool colour;   //colour value for node
@@ -62,14 +62,14 @@ public:
 
 protected:
     void insert_fix(node<T>* n);                   //helper function for insert
-    void rightRotate(node<T> *n);                  //right rotate the tree   
+    void rightRotate(node<T> *n);                  //right rotate the tree
     void leftRotate(node<T> *n);                   //left rotate the tree
     void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
 
     T* max(node<T>* n) const;                      //get the maximum item
     T* min(node<T>* n) const;                      //get the minimum item
 
-    string getInOrder(node<T> *x) const;           //helper function for walks 
+    string getInOrder(node<T> *x) const;           //helper function for walks
     string getPreOrder(node<T> *x) const;
     string getPostOrder(node<T> *x) const;
 
