@@ -80,7 +80,15 @@ bool rbt<T>::empty() const{
 
 template<class T>
 T* rbt<T>::get(T item) const{
+  /*
+    this function returns the pointer to the value we look for.
 
+    PreCondition: tree has to be initialized.
+  */
+  node<T> *temp = getNode(root, &item);
+  if (temp == NULL)
+    throw new noKeyException;
+  return temp->key;
 }
 
 template<class T>
@@ -368,4 +376,10 @@ node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
       n = n->l;
   }
   return n;
+}
+
+
+template<class T>
+int rbt<T>::bh(node<T>* n) const{
+  return 0;//dummy
 }

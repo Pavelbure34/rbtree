@@ -16,7 +16,7 @@ using namespace std;
 template<class T>
 class node{
 public:
-    T* key;        //key for tree
+    T* key;        //pointer to key for tree
     bool colour;   //colour value for node
     node<T> *p;    //pointer to the parent node
     node<T> *r;    //pointer to the right child node
@@ -26,7 +26,7 @@ public:
      node<T>* r = NULL, node<T>* l = NULL);  //constructor
     ~node();                                 //destructor
 
-    string toStr() const;
+    string toStr() const;                    //toString method
     friend ostream& operator<<(ostream &o, node<T> &n){
         //this friend function enables osteam operator.
         o << n.toStr();
@@ -40,24 +40,25 @@ protected:
     node<T> *root;
 
 public:
-    rbt();                                       //default constructor #1
-    rbt(const rbt<T> &tree);                     //copy constructor #2
-    ~rbt();                                      //destructor
+    rbt();                                         //default constructor #1
+    rbt(const rbt<T> &tree);                       //copy constructor #2
+    ~rbt();                                        //destructor
 
-    bool empty() const;                          //returns true if empty
-    T* get(T item) const;                        //returns the pointer to value
-    void insert(T* item);                        //insert the item
-    // void remove(T &item);                        //remove the item
+    bool empty() const;                            //returns true if empty
+    T* get(T item) const;                          //returns the pointer to value
+    void insert(T* item);                          //insert the item
+    // void remove(T &item);                       //remove the item
 
-    T* succ(T* key) const;                        //get the successor
-    T* predec(T* key) const;                      //get the predecessor
+    T* succ(T* key) const;                         //get the successor
+    T* predec(T* key) const;                       //get the predecessor
 
-    string inOrder() const;                      //in-order travelsal
-    string preOrder() const;                     //pre-order travelsal
-    string postOrder() const;                    //post-order travelsal
+    string inOrder() const;                        //in-order travelsal
+    string preOrder() const;                       //pre-order travelsal
+    string postOrder() const;                      //post-order travelsal
 
-    void operator=(rbt<T> &tree);                //assignment operator
-    node<T>* getRoot() const;                    //returns the root
+    void operator=(rbt<T> &tree);                  //assignment operator
+    node<T>* getRoot() const;                      //returns the root
+    int bh(node<T>* n) const;                      //returns the black height
 
 protected:
     void insert_fix(node<T>* n);                   //helper function for insert
