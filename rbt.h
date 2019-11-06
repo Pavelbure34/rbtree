@@ -59,6 +59,7 @@ public:
     void operator=(rbt<T> &tree);                  //assignment operator
     node<T>* getRoot() const;                      //returns the root
     int bh(node<T>* n) const;                      //returns the black height
+    string rbt<T>::toString();
 
 protected:
     void insert_fix(node<T>* n);                   //helper function for insert
@@ -69,7 +70,7 @@ protected:
     T* max(node<T>* n) const;                      //get the maximum item
     T* min(node<T>* n) const;                      //get the minimum item
 
-    string getInOrder(node<T> *x) const;           //helper function for walks
+    string inOrderPrint(node<T>* x, stringstream& s) const;
     string getPreOrder(node<T> *x) const;
     string getPostOrder(node<T> *x) const;
 

@@ -29,7 +29,8 @@ string node<T>::toStr() const{
 
     Pre-Condition:node has to be not-null
   */
-  string str = (key != NULL)?"" + to_string(*key):"";
+  string col = (colour == R && colour != NULL)?"red":"black";
+  string str = (key != NULL)?"" + to_string(*key) + ": " + col:"";
   return str;
 }
 
@@ -382,4 +383,23 @@ node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
 template<class T>
 int rbt<T>::bh(node<T>* n) const{
   return 0;//dummy
+}
+
+template<class T>
+string rbt<T>::inOrderPrint(node<T>* x, stringstream& s) const{
+  if(x == NULL)
+    return s.str();
+  else{
+    inorderString(x->left, s);
+    s << x.toStr();
+    inorderString(x->right, s);
+
+  }
+} 
+
+template<class T> 
+string rbt<T>::toString(){
+  stringstream s;
+  string y = inOrderPrint(root, s);
+  return y;
 }

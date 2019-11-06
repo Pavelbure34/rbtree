@@ -109,7 +109,8 @@ void test_insert(){
   int * b = new int;
   *b = a;
   tree.insert(b);
-
+  *b = 1;
+  tree.insert(b);
   
 }
 
