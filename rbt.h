@@ -65,7 +65,7 @@ protected:
     void insert_fix(node<T>* n);                   //helper function for insert
     void rightRotate(node<T> *n);                  //right rotate the tree
     void leftRotate(node<T> *n);                   //left rotate the tree
-    void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
+    // void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
 
     T* max(node<T>* n) const;                      //get the maximum item
     T* min(node<T>* n) const;                      //get the minimum item

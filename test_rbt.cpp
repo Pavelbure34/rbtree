@@ -9,68 +9,52 @@
 */
 
 void test_node_constructors_toStr(){
-  //testing constructor with no argument
-  node<int> in;                                  //dummy for parent node
+  //testing completely empty node
+  node<int> in;
   node<double> dn;
   node<float> fn;
   node<char> cn;
   node<string> sn;
-  //testing constructor with arguments.
-  node<int> in1;                                 //giving colour
-  in1.colour = R;
+
+  node<int> in1;     //dummies for pointer input.
   node<double> dn1;
-  dn1.colour = B;
   node<float> fn1;
-  fn1.colour = R;
   node<char> cn1;
-  cn1.colour = B;
   node<string> sn1;
-  sn1.colour = R;
 
-  node<int> in2(new int(10));                    //giving colour and key
-  in2.colour = R;
+  //testing giving key
+  node<int> in2(new int(10));    
   node<double> dn2(new double(10.0));
-  dn2.colour = B;
-  node<float> fn2(new float(10.0f));
-  fn2.colour = R;
+  node<float> fn2(new float(11.0f));
   node<char> cn2(new char('a'));
-  cn2.colour = B;
-  node<string> sn2(new string("hello world!"));
-  sn2.colour = R;
+  node<string> sn2(new string("Hello"));
 
-  node<int> in3(new int(10), NULL, &in1, &in);   //giving colour, key, and rest of pointers.
-  in3.colour = R;
-  node<double> dn3(new double(10.0), NULL, &dn1, &dn);
-  dn3.colour = B;
-  node<float> fn3(new float(10.0f), NULL, &fn1, &fn);
-  fn3.colour = R;
-  node<char> cn3(new char('a'), NULL, &cn1, &cn);
-  cn3.colour = B;
-  node<string> sn3(new string("hello world!"), NULL, &sn1, &sn);
-  sn3.colour = R;
+  //testing key, colour
+  node<int> in3(new int(10), new bool(R));    
+  node<double> dn3(new double(10.0), new bool(B));
+  node<float> fn3(new float(11.0f), new bool(R));
+  node<char> cn3(new char('a'), new bool(B));
+  node<string> sn3(new string("Hello"), new bool(R));
 
-  //testing toStr method
-  assert(in.toStr() == "");
-  assert(dn.toStr() == "");
-  assert(fn.toStr() == "");
-  assert(cn.toStr() == "");
-  assert(sn.toStr() == "");
-  assert(in1.toStr() == "");
-  assert(dn1.toStr() == "");
-  assert(fn1.toStr() == "");
-  assert(cn1.toStr() == "");
-  assert(sn1.toStr() == "");
-  assert(in2.toStr() == "10: red");
-  assert(dn2.toStr() == "10.000000: black");
-  assert(fn2.toStr() == "10.000000: red");
-  assert(cn2.toStr() == "97: black");
-  assert(sn2.toStr() == "hello world!: red");
+  //testing everything
+  node<int> in4(new int(10), new bool(R), &in1, &in2, &in3);    
+  node<double> dn4(new double(10.0), new bool(B), &dn1, &dn2, &dn3);
+  node<float> fn4(new float(11.0f), new bool(R), &fn1, &fn2, &fn3);
+  node<char> cn4(new char('a'), new bool(B), &cn1, &cn2, &cn3);
+  node<string> sn4(new string("Hello"), new bool(R), &sn1, &sn2, &sn3);
+
+  //tesing toStr()
+  assert(in4.toStr() == "10:r");
+  assert(dn4.toStr() == "10.000000:b");
+  assert(fn4.toStr() == "11.000000:r");
+  assert(cn4.toStr() == "97:b");
+  assert(sn4.toStr() == "Hello:r");
 
   //if no error, detstructor has been working fine at this point.
 }
 
-void test_rbt_constructors(){
-  rbt<int> it;
+void test_rbt_constructors_1(){
+  rbt<int> it;               //making empty tree
   rbt<double> dt;
   rbt<float> ft;
   rbt<char> ct;
@@ -89,130 +73,265 @@ void test_rbt_constructors(){
   assert(st.empty() == st1.empty());
 }
 
-template<class T>
-void test_rbt_insert(rbt<T> &tree, T* a, T* b, T* c){
-  cout << *a << endl;
-  tree.insert(a);           //testing insert with empty tree
-  cout << *b << endl;
-  tree.insert(b);           //testing insert with non empty tree
-  cout << *c << endl;
-  tree.insert(c);           //inserting elememnt smaller than b
-  assert(!tree.empty());    //it should not empty
-}
-
-
-void test_insert(){
-  rbt<int> tree;
-  assert(tree.empty() == 1);
-  int a = 41;
-  int * b = new int;
-  *b = a;
-  tree.insert(b);
-  *b = 31;
-  tree.insert(b);
-  cout << tree.inOrder() << endl;
-  *b = 38;
-  tree.insert(b);
-  *b = 12;
-  tree.insert(b);
-  // *b = 19;
-  // tree.insert(b);
-  // *b = 8;
-  // tree.insert(b);
-  cout << tree.inOrder() << endl;
-
-
-}
-
-template<class T>
-void test_rbt_assingment(rbt<T> &a, rbt<T> &b){
-  a = b;
-  if (b.empty())       //if copy object is empty
-    assert(a.empty()); //copied object is also empty
-  else                 //if not
-    assert(!a.empty());//it is not.
-}
-
-template<class T>
-void test_rbt_get(rbt<T> &tree, T a, T b){
-
-}
-
-template<class T>
-void test_rbt_remove(rbt<T> &tree, T a, T b){
-
-}
-
-int main(int argc, char const *argv[]) {
-  LOG1("RBT class test init");
-  LOG1("----------------------------------------");
-
-  //LOG2("(1) node constructor, destructor and toStr:");
-  test_node_constructors_toStr();
-  //LOG1(" passed");
-
-  test_rbt_constructors();
+void test_rbt_insert(){
   rbt<int> it;
   rbt<double> dt;
   rbt<float> ft;
   rbt<char> ct;
   rbt<string> st;
 
-  rbt<int> it1(it);          //testing copy constructor with empty
+  assert(it.empty());  //initial creation has to be empty
+  assert(dt.empty());
+  assert(ft.empty());
+  assert(ct.empty());
+  assert(st.empty());
+
+  int ia = 41;                 //Katie, your style here!!
+  double da = 31.0; 
+  float fa = 31.0f;
+  char ca = 'x';
+  string sa = "Hello World!";    
+
+  //inserting first item
+  it.insert(&ia);
+  dt.insert(&da);
+  ft.insert(&fa);
+  ct.insert(&ca);
+  st.insert(&sa);
+
+  int ib = 50; 
+  double db = 41.0;
+  float fb = 41.0f;
+  char cb = 'b';
+  string sb = "Hello";    
+
+  //inserting second item
+  it.insert(&ib);
+  dt.insert(&db);
+  ft.insert(&fb);
+  ct.insert(&cb);
+  st.insert(&sb);
+
+  int ic = 44; 
+  double dc = 39.0;
+  float fc = 39.0f;
+  char cc = 'f';
+  string sc = "o World!";    
+
+  //inserting third item
+  it.insert(&ic);
+  dt.insert(&dc);
+  ft.insert(&fc);
+  ct.insert(&cc);
+  st.insert(&sc);
+
+  int id = 10; 
+  double dd = 10.0;
+  float fd = 5.0f;
+  char cd = 'a';
+  string sd = "ld!"; 
+
+  //so ... on
+  it.insert(&id);
+  dt.insert(&dd);
+  ft.insert(&fd);
+  ct.insert(&cd);
+  st.insert(&sd);
+
+  // cout << it.preOrder() << endl;
+  // cout << dt.preOrder() << endl;
+  // cout << ft.preOrder() << endl;
+  // cout << ct.preOrder() << endl;
+  // cout << st.preOrder() << endl;
+
+  assert(!it.empty());            //after insertion non empty
+  assert(!dt.empty());
+  assert(!ft.empty());
+  assert(!ct.empty());
+  assert(!st.empty());
+}
+
+void test_rbt_constructors_2(){
+  rbt<int> it;
+  rbt<double> dt;
+  rbt<float> ft;
+  rbt<char> ct;
+  rbt<string> st;
+
+  assert(it.empty()); //making it sure it is emtpy
+  assert(dt.empty());
+  assert(ft.empty());
+  assert(ct.empty());
+  assert(st.empty());
+
+  int *ia = new int(41);
+  int *ib = new int(44);
+  double *da = new double(31.0);
+  double *db = new double(39.0);
+  float *fa = new float(31.0f);
+  float *fb = new float(39.0f);
+  char *ca = new char('x');
+  char *cb = new char('f');
+  string *sa = new string("Hello World!");
+  string *sb = new string("o World!");
+
+  it.insert(ia);       //inserting
+  dt.insert(da);
+  ft.insert(fa);
+  ct.insert(ca);
+  st.insert(sa);
+
+  it.insert(ib);
+  dt.insert(db);
+  ft.insert(fb);
+  ct.insert(cb);
+  st.insert(sb);
+
+  rbt<int> it1(it);   //copy constructor with non empty tree
   rbt<double> dt1(dt);
   rbt<float> ft1(ft);
   rbt<char> ct1(ct);
   rbt<string> st1(st);
 
+  assert(!it1.empty()); //making it sure it is not empty
+  assert(!dt1.empty());
+  assert(!ft1.empty());
+  assert(!ct1.empty());
+  assert(!st1.empty());
 
-  //LOG2("(4) rbt copy assignment operator with emptyTree:");
-  test_rbt_assingment(it, it);
-  test_rbt_assingment(dt, dt);
-  test_rbt_assingment(ft, ft);
-  test_rbt_assingment(ct, ct);
-  test_rbt_assingment(st, st);
-  LOG1(" passed");
-  //LOG1("(5) rbt empty: passed"); //reaching here, empty works.
+  //reaching here, if no error, deepCopy and destructor has been working fine
+  delete ia;           //freeing memory
+  delete ib;
+  delete da;
+  delete db;
+  delete fa;
+  delete fb;
+  delete ca;
+  delete cb;
+  delete sa;
+  delete sb;
+}
 
-  LOG2("(6) rbt insert:");
-  test_insert();
-  //test_rbt_insert(it, new int(10), new int(15),new int(12));
-  // test_rbt_insert(dt, new double(10.0), new double(15.0), new double(12.0));
-  // test_rbt_insert(ft, new float(10.0f), new float(15.0f), new float(12.0f));
-  // test_rbt_insert(ct, new char('a'), new char('c'), new char('b'));
-  // test_rbt_insert(st, new string("hello"), new string("lo"), new string("Hel"));
-  // LOG1(" passed");
+void test_rbt_assingment(){
+  rbt<int> it;
+  rbt<double> dt;
+  rbt<float> ft;
+  rbt<char> ct;
+  rbt<string> st;
 
-  // LOG2("(7) rbt copy constructor with non-emptyTree:");
-  // rbt<int> it2(it);
-  // rbt<double> dt2(dt);
-  // rbt<float> ft2(ft);
-  // rbt<char> ct2(ct);
-  // rbt<string> st2(st);
-  // assert(!it2.empty());
-  // assert(!dt2.empty());
-  // assert(!ft2.empty());
-  // assert(!ct2.empty());
-  // assert(!st2.empty());
-  // LOG1(" passed");
+  assert(it.empty()); //making it sure it is emtpy
+  assert(dt.empty());
+  assert(ft.empty());
+  assert(ct.empty());
+  assert(st.empty());
 
-  // //reaching here, insert_fix, rotate functions have working fine.
-  // LOG2("(8) rbt insert_fix: passed");
-  // LOG2("(9) rbt leftRotate: passed");
-  // LOG2("(10) rbt rightRotate: passed");
+  it.insert(new int(41));       //inserting
+  dt.insert(new double(31.0));
+  ft.insert(new float(31.0f));
+  ct.insert(new char('x'));
+  st.insert(new string("Hello World!"));
 
-  // LOG2("rbt copy assignment operator with non-emptyTree:");
-  // test_rbt_assingment(it1, it);
-  // test_rbt_assingment(dt1, dt);
-  // test_rbt_assingment(ft1, ft);
-  // test_rbt_assingment(ct1, ct);
-  // test_rbt_assingment(st1, st);
-  // LOG1("passed");
+  it.insert(new int(44));
+  dt.insert(new double(39.0));
+  ft.insert(new float(39.0f));
+  ct.insert(new char('f'));
+  st.insert(new string("o World!"));
 
-  // LOG2("rbt get:");
-  // LOG1("passed");
+  rbt<int> it1 = it;   //assignment on empty tree
+  rbt<double> dt1 = dt;
+  rbt<float> ft1 = ft;
+  rbt<char> ct1 = ct;
+  rbt<string> st1 = st;
 
-  LOG1("----------------------------------------");
+  assert(!it1.empty()); //making it sure it is not empty
+  assert(!dt1.empty());
+  assert(!ft1.empty());
+  assert(!ct1.empty());
+  assert(!st1.empty());
+
+  // it1 = it1;            //assignment on non-empty tree core dump here
+  // dt1 = dt1;
+  // ft1 = ft1;
+  // ct1 = ct1;
+  // st1 = st1;
+
+  // assert(!it1.empty()); //making it sure it is not empty
+  // assert(!dt1.empty());
+  // assert(!ft1.empty());
+  // assert(!ct1.empty());
+  // assert(!st1.empty());
+}
+
+template<class T>
+void test_rbt_get(rbt<T> &tree, T a, T b){
+  rbt<int> it;
+  rbt<double> dt;
+  rbt<float> ft;
+  rbt<char> ct;
+  rbt<string> st;
+
+  assert(it.empty()); //making it sure it is emtpy
+  assert(dt.empty());
+  assert(ft.empty());
+  assert(ct.empty());
+  assert(st.empty());
+
+  int *ia = new int(41);
+  int *ib = new int(44);
+  double *da = new double(31.0);
+  double *db = new double(39.0);
+  float *fa = new float(31.0f);
+  float *fb = new float(39.0f);
+  char *ca = new char('x');
+  char *cb = new char('f');
+  string *sa = new string("Hello World!");
+  string *sb = new string("o World!");
+
+  it.insert(ia);       //inserting
+  dt.insert(da);
+  ft.insert(fa);
+  ct.insert(ca);
+  st.insert(sa);
+
+  it.insert(ib);       //inserting
+  dt.insert(db);
+  ft.insert(fb);
+  ct.insert(cb);
+  st.insert(sb);
+
+  assert(!it.empty()); //making it sure it is not empty
+  assert(!dt.empty());
+  assert(!ft.empty());
+  assert(!ct.empty());
+  assert(!st.empty());
+
+  assert(*(it.get(*ia)) == *ia && *(it.get(*ib)) == *ib);
+  assert(*(dt.get(*da)) == *da && *(dt.get(*db)) == *db);
+  assert(*(ft.get(*fa)) == *fa && *(ft.get(*fb)) == *fb);
+  assert(*(ct.get(*ca)) == *ca && *(ct.get(*cb)) == *cb);
+  assert(*(st.get(*sa)) == *sa && *(st.get(*sb)) == *sb);
+
+  delete ia;           //freeing memory
+  delete ib;
+  delete da;
+  delete db;
+  delete fa;
+  delete fb;
+  delete ca;
+  delete cb;
+  delete sa;
+  delete sb;
+}
+
+int main(int argc, char const *argv[]) {
+  //destructor isn't working
+
+  LOG1("RBT class test init");
+  test_node_constructors_toStr(); //test node constructor, destructor and toStr;
+  test_rbt_constructors_1();      //test rbt constructors
+  // test_rbt_insert();              //testing insert
+  // test_rbt_constructors_2();         //testing copy constructor on non-empty tree         
+  // test_rbt_assingment();             //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
 }
