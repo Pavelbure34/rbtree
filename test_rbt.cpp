@@ -15,7 +15,6 @@ void test_node_constructors_toStr(){
   node<float> fn;
   node<char> cn;
   node<string> sn;
-
   //testing constructor with arguments.
   node<int> in1;                                 //giving colour
   in1.colour = R;
@@ -61,11 +60,11 @@ void test_node_constructors_toStr(){
   assert(fn1.toStr() == "");
   assert(cn1.toStr() == "");
   assert(sn1.toStr() == "");
-  assert(in2.toStr() == "10");
-  assert(dn2.toStr() == "10.000000");
-  assert(fn2.toStr() == "10.000000");
-  assert(cn2.toStr() == "97");
-  assert(sn2.toStr() == "hello world!");
+  assert(in2.toStr() == "10: red");
+  assert(dn2.toStr() == "10.000000: black");
+  assert(fn2.toStr() == "10.000000: red");
+  assert(cn2.toStr() == "97: black");
+  assert(sn2.toStr() == "hello world!: red");
 
   //if no error, detstructor has been working fine at this point.
 }
@@ -105,13 +104,24 @@ void test_rbt_insert(rbt<T> &tree, T* a, T* b, T* c){
 void test_insert(){
   rbt<int> tree;
   assert(tree.empty() == 1);
-  int a = 10;
+  int a = 41;
   int * b = new int;
   *b = a;
   tree.insert(b);
-  *b = 1;
+  *b = 31;
   tree.insert(b);
-  
+  cout << tree.inOrder() << endl;
+  *b = 38;
+  tree.insert(b);
+  *b = 12;
+  tree.insert(b);
+  // *b = 19;
+  // tree.insert(b);
+  // *b = 8;
+  // tree.insert(b);
+  cout << tree.inOrder() << endl;
+
+
 }
 
 template<class T>
@@ -137,9 +147,9 @@ int main(int argc, char const *argv[]) {
   LOG1("RBT class test init");
   LOG1("----------------------------------------");
 
-  LOG2("(1) node constructor, destructor and toStr:");
+  //LOG2("(1) node constructor, destructor and toStr:");
   test_node_constructors_toStr();
-  LOG1(" passed");
+  //LOG1(" passed");
 
   test_rbt_constructors();
   rbt<int> it;
@@ -155,14 +165,14 @@ int main(int argc, char const *argv[]) {
   rbt<string> st1(st);
 
 
-  LOG2("(4) rbt copy assignment operator with emptyTree:");
+  //LOG2("(4) rbt copy assignment operator with emptyTree:");
   test_rbt_assingment(it, it);
   test_rbt_assingment(dt, dt);
   test_rbt_assingment(ft, ft);
   test_rbt_assingment(ct, ct);
   test_rbt_assingment(st, st);
   LOG1(" passed");
-  LOG1("(5) rbt empty: passed"); //reaching here, empty works.
+  //LOG1("(5) rbt empty: passed"); //reaching here, empty works.
 
   LOG2("(6) rbt insert:");
   test_insert();

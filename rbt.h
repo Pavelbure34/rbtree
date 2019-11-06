@@ -6,6 +6,7 @@
 */
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "exceptions.h"
 using namespace std;
 
@@ -14,15 +15,15 @@ using namespace std;
 #define B false    //false for black
 
 template<class T>
-class node{ 
+class node{
 public:
     T* key;        //pointer to key for tree
-    bool colour;   //colour value for node
+    bool* colour;  //colour value for node
     node<T> *p;    //pointer to the parent node
     node<T> *r;    //pointer to the right child node
     node<T>* l;    //pointer to the left child node
 
-    node(T* item = NULL, node<T>* p = NULL,
+    node(T* item = NULL, bool *colour = NULL, node<T>* p = NULL,
      node<T>* r = NULL, node<T>* l = NULL);  //constructor
     ~node();                                 //destructor
 
@@ -59,7 +60,6 @@ public:
     void operator=(rbt<T> &tree);                  //assignment operator
     node<T>* getRoot() const;                      //returns the root
     int bh(node<T>* n) const;                      //returns the black height
-    string rbt<T>::toString();
 
 protected:
     void insert_fix(node<T>* n);                   //helper function for insert
@@ -70,7 +70,7 @@ protected:
     T* max(node<T>* n) const;                      //get the maximum item
     T* min(node<T>* n) const;                      //get the minimum item
 
-    string inOrderPrint(node<T>* x, stringstream& s) const;
+    string getInOrder(node<T>* x) const;
     string getPreOrder(node<T> *x) const;
     string getPostOrder(node<T> *x) const;
 

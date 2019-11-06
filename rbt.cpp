@@ -6,14 +6,33 @@
 */
 
 template<class T>//constructor #3
-node<T>::node(T* item, node<T>* p, node<T>* r, node<T>* l){
+node<T>::node(T* item,  bool *colour, node<T>* p, node<T>* r, node<T>* l){
     if (item != NULL)
       key = new T(*item);
     else
       key = NULL;
+
     this->p = p;
-    this->r = r;
-    this->l = l;
+
+    if (colour != NULL){
+        this->colour = new bool(*colour);
+    }
+    this->colour = colour;
+
+
+    if (r != NULL)
+      this->r = r;
+    else{
+      this->r = new node<T>();
+      this->r->colour = B;
+    }
+
+    if (l != NULL)
+      this->l = l;
+    else{
+      this->l = new node<T>();
+      this->l->colour = B;
+    }
 }
 
 template<class T>//destructor
@@ -29,7 +48,7 @@ string node<T>::toStr() const{
 
     Pre-Condition:node has to be not-null
   */
-  string col = (colour == R && colour != NULL)?"red":"black";
+  string col = (colour == R)?"red":"black";
   string str = (key != NULL)?"" + to_string(*key) + ": " + col:"";
   return str;
 }
@@ -42,7 +61,8 @@ string node<string>::toStr() const{
 
     Pre-Condition:node has to be not-null
   */
-  string str = (key != NULL)?"" + *key:"";
+  string col = (colour == R)?"red":"black";
+  string str = (key != NULL)?"" + *key + ": " + col:"";
   return str;
 }
 
@@ -107,7 +127,7 @@ void rbt<T>::insert(T* item){
       else
         x = x->r;
     }
-    
+
     node<T>* z = new node<T>(item, y, NULL, NULL); //setting up new node z
     z->colour = R;
     if (y == NULL)                                 //if empty tree
@@ -147,7 +167,6 @@ void rbt<T>::insert_fix(node<T> *n){
         n->p->p->colour = R;
         rightRotate(n->p->p);
       }else{
-        cout << 2 << endl;
         y = n->p->p->l;
         cout << (n == NULL) << endl;
         cout << (y == NULL) << endl;
@@ -204,11 +223,13 @@ void rbt<T>::leftRotate(node<T> *n){
 
       PreCondition: node x should not be null.
   */
+  cout << "a" << endl;
   node<T>* y = n->r;  //setting y with left child of x
   n->r = y->l;        //turn left subtree of y into x right subtree
-  if(y->l != NULL)    
+  if(y->l != NULL)
     y->l->p = n;
   y->p = n->p;        //link parent of x to y's
+  cout << "b" << endl;
   if(n->p == NULL)
     root = y;
   else if(n == n->p->l)
@@ -228,7 +249,7 @@ void rbt<T>::rbt_transplant(node<T> *u, node<T> *v){
   */
   if (u->p == NULL)     //case I:a tree has single node
     root = v;
-  else if (u == u->p->l)//case II: 
+  else if (u == u->p->l)//case II:
     u->p->l = v;
   else                  //case III:
     u->p->r = v;
@@ -237,7 +258,7 @@ void rbt<T>::rbt_transplant(node<T> *u, node<T> *v){
 
 // template<class T>
 // void rbt<T>::remove(T &item){
-  
+
 // }
 
 template<class T>
@@ -257,7 +278,7 @@ void rbt<T>::deepCopy(node<T> *n) {
 
         Pre-condition: input n has to be not NULL.
    */
-  if(n != NULL){
+  if(n->colour){
     insert(n->key);
     deepCopy(n->l);
     deepCopy(n->r);
@@ -318,7 +339,7 @@ T* rbt<T>::succ(T* key) const{
   */
   node<T> *x = getNode(root, key);
   if(x == NULL) {
-    throw new noKeyException; 
+    throw new noKeyException;
   }
   if(x->r != NULL) {
     return min(x->r); //get min
@@ -344,7 +365,7 @@ T* rbt<T>::predec(T* key) const{
   */
   node<T> *x = getNode(root, key);
   if(x == NULL) {
-    throw new noKeyException; 
+    throw new noKeyException;
   }
   if(x->l != NULL) {
     return max(x->l); //get min
@@ -373,7 +394,7 @@ node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
   while(n != NULL && *key != *(n->key)){
     if(*(n->key) < *key)
       n = n->r;
-    else 
+    else
       n = n->l;
   }
   return n;
@@ -386,20 +407,42 @@ int rbt<T>::bh(node<T>* n) const{
 }
 
 template<class T>
-string rbt<T>::inOrderPrint(node<T>* x, stringstream& s) const{
+string rbt<T>::getInOrder(node<T>* x) const{
   if(x == NULL)
-    return s.str();
-  else{
-    inorderString(x->left, s);
-    s << x.toStr();
-    inorderString(x->right, s);
+    return "";
+  else
+    return getInOrder(x->l) + x->toStr() + " " + getInOrder(x->r);
+}
 
-  }
-} 
 
-template<class T> 
-string rbt<T>::toString(){
-  stringstream s;
-  string y = inOrderPrint(root, s);
-  return y;
+template<class T>
+string rbt<T>::getPreOrder(node<T> *x) const{
+  if(x == NULL)
+    return "";
+  else
+    return x->toStr() + " " + getPreOrder(x->l) + getPreOrder(x->r);
+}
+
+template<class T>
+string rbt<T>::getPostOrder(node<T> *x) const{
+  if(x == NULL)
+    return "";
+  else
+    return getPostOrder(x->l) + getPostOrder(x->r) +  x->toStr() + " ";
+}
+
+template<class T>
+string rbt<T>::inOrder() const{
+  return getInOrder(root);
+}
+
+template<class T>
+string rbt<T>::preOrder() const{
+  return getPreOrder(root);
+}
+
+
+template<class T>
+string rbt<T>::postOrder() const{
+  return getPostOrder(root);
 }
