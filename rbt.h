@@ -25,7 +25,7 @@ public:
 
     node(T* item = NULL, bool *colour = NULL, node<T>* p = NULL,
      node<T>* r = NULL, node<T>* l = NULL);  //constructor
-    ~node();                                 //destructor
+    // ~node();                                 //destructor
 
     string toStr() const;                    //toString method
     friend ostream& operator<<(ostream &o, node<T> &n){

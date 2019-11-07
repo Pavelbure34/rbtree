@@ -53,7 +53,7 @@ void test_node_constructors_toStr(){
   //if no error, detstructor has been working fine at this point.
 }
 
-void test_rbt_constructors_1(){
+void test_rbt_constructors(){
   rbt<int> it;               //making empty tree
   rbt<double> dt;
   rbt<float> ft;
@@ -71,6 +71,30 @@ void test_rbt_constructors_1(){
   assert(ft.empty() == ft1.empty());
   assert(ct.empty() == ct1.empty());
   assert(st.empty() == st1.empty());
+
+  it.insert(new int(41));       //inserting
+  dt.insert(new double(31.0));
+  ft.insert(new float(31.0f));
+  ct.insert(new char('x'));
+  st.insert(new string("Hello World!"));
+
+  it.insert(new int(44));
+  dt.insert(new double(39.0));
+  ft.insert(new float(39.0f));
+  ct.insert(new char('f'));
+  st.insert(new string("o World!"));
+
+  rbt<int> it2(it);   //copy constructor with non empty tree
+  rbt<double> dt2(dt);
+  rbt<float> ft2(ft);
+  rbt<char> ct2(ct);
+  rbt<string> st2(st);
+
+  assert(!it2.empty()); //making it sure it is not empty
+  assert(!dt2.empty());
+  assert(!ft2.empty());
+  assert(!ct2.empty());
+  assert(!st2.empty());
 }
 
 void test_rbt_insert(){
@@ -86,162 +110,64 @@ void test_rbt_insert(){
   assert(ct.empty());
   assert(st.empty());
 
-  int ia = 41;                 //Katie, your style here!!
-  double da = 31.0; 
-  float fa = 31.0f;
-  char ca = 'x';
-  string sa = "Hello World!";    
+  int iArr[6] = {50, 30, 40, 10, 5, 70};
+  double dArr[6] = {50.0, 30.0, 40.0, 10.0, 5.0, 70.0};
+  float fArr[6] = {50.0f, 30.0f, 40.0f, 10.0f, 5.0f, 70.0f};
+  char cArr[6] = {'z','f','g', 'a', 'b', 'x'};
+  string sArr[6] = {"Hello","World","Hel","lo","rld", "d"};
 
-  //inserting first item
-  it.insert(&ia);
-  dt.insert(&da);
-  ft.insert(&fa);
-  ct.insert(&ca);
-  st.insert(&sa);
-
-  int ib = 50; 
-  double db = 41.0;
-  float fb = 41.0f;
-  char cb = 'b';
-  string sb = "Hello";    
-
-  //inserting second item
-  it.insert(&ib);
-  dt.insert(&db);
-  ft.insert(&fb);
-  ct.insert(&cb);
-  st.insert(&sb);
-
-  int ic = 44; 
-  double dc = 39.0;
-  float fc = 39.0f;
-  char cc = 'f';
-  string sc = "o World!";    
-
-  //inserting third item
-  it.insert(&ic);
-  dt.insert(&dc);
-  ft.insert(&fc);
-  ct.insert(&cc);
-  st.insert(&sc);
-
-  int id = 10; 
-  double dd = 10.0;
-  float fd = 5.0f;
-  char cd = 'a';
-  string sd = "ld!"; 
-
-  //so ... on
-  it.insert(&id);
-  dt.insert(&dd);
-  ft.insert(&fd);
-  ct.insert(&cd);
-  st.insert(&sd);
-
-  // cout << it.preOrder() << endl;
-  // cout << dt.preOrder() << endl;
-  // cout << ft.preOrder() << endl;
-  // cout << ct.preOrder() << endl;
-  // cout << st.preOrder() << endl;
-
-  assert(!it.empty());            //after insertion non empty
+  for (int i = 0;i < 6; i++){
+    it.insert(iArr + i);
+    dt.insert(dArr + i);
+    ft.insert(fArr + i);
+    ct.insert(cArr + i);
+    st.insert(sArr + i);
+  }
+  
+  assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
   assert(!ft.empty());
   assert(!ct.empty());
   assert(!st.empty());
 }
 
-void test_rbt_constructors_2(){
-  rbt<int> it;
-  rbt<double> dt;
-  rbt<float> ft;
-  rbt<char> ct;
-  rbt<string> st;
-
-  assert(it.empty()); //making it sure it is emtpy
-  assert(dt.empty());
-  assert(ft.empty());
-  assert(ct.empty());
-  assert(st.empty());
-
-  int *ia = new int(41);
-  int *ib = new int(44);
-  double *da = new double(31.0);
-  double *db = new double(39.0);
-  float *fa = new float(31.0f);
-  float *fb = new float(39.0f);
-  char *ca = new char('x');
-  char *cb = new char('f');
-  string *sa = new string("Hello World!");
-  string *sb = new string("o World!");
-
-  it.insert(ia);       //inserting
-  dt.insert(da);
-  ft.insert(fa);
-  ct.insert(ca);
-  st.insert(sa);
-
-  it.insert(ib);
-  dt.insert(db);
-  ft.insert(fb);
-  ct.insert(cb);
-  st.insert(sb);
-
-  rbt<int> it1(it);   //copy constructor with non empty tree
-  rbt<double> dt1(dt);
-  rbt<float> ft1(ft);
-  rbt<char> ct1(ct);
-  rbt<string> st1(st);
-
-  assert(!it1.empty()); //making it sure it is not empty
-  assert(!dt1.empty());
-  assert(!ft1.empty());
-  assert(!ct1.empty());
-  assert(!st1.empty());
-
-  //reaching here, if no error, deepCopy and destructor has been working fine
-  delete ia;           //freeing memory
-  delete ib;
-  delete da;
-  delete db;
-  delete fa;
-  delete fb;
-  delete ca;
-  delete cb;
-  delete sa;
-  delete sb;
-}
-
 void test_rbt_assingment(){
-  rbt<int> it;
-  rbt<double> dt;
-  rbt<float> ft;
-  rbt<char> ct;
-  rbt<string> st;
+  rbt<int> it3;
+  rbt<double> dt3;
+  rbt<float> ft3;
+  rbt<char> ct3;
+  rbt<string> st3;
+  
+  assert(it3.empty()); //making it sure it is emtpy
+  assert(dt3.empty());
+  assert(ft3.empty());
+  assert(ct3.empty());
+  assert(st3.empty());
 
-  assert(it.empty()); //making it sure it is emtpy
-  assert(dt.empty());
-  assert(ft.empty());
-  assert(ct.empty());
-  assert(st.empty());
+  int iArr[2] = {41, 44};
+  double dArr[2] = {31.0, 31.9};
+  float fArr[2] = {31.0f, 31.9f};
+  char cArr[2] = {'x', 'f'};
+  string sArr[2] = {"Hello World!", "o World!"};
 
-  it.insert(new int(41));       //inserting
-  dt.insert(new double(31.0));
-  ft.insert(new float(31.0f));
-  ct.insert(new char('x'));
-  st.insert(new string("Hello World!"));
+  for (int i = 0; i < 2; i++){
+    it3.insert(iArr + i);        //inserting
+    dt3.insert(dArr + i);
+    ft3.insert(fArr + i);
+    ct3.insert(cArr + i);
+    st3.insert(sArr + i);
+    assert(*it3.get(iArr[i]) == iArr[i]); //confirming insertion
+    assert(*dt3.get(dArr[i]) == dArr[i]);
+    assert(*ft3.get(fArr[i]) == fArr[i]);
+    assert(*ct3.get(cArr[i]) == cArr[i]);
+    assert(*st3.get(sArr[i]) == sArr[i]);
+  }
 
-  it.insert(new int(44));
-  dt.insert(new double(39.0));
-  ft.insert(new float(39.0f));
-  ct.insert(new char('f'));
-  st.insert(new string("o World!"));
-
-  rbt<int> it1 = it;   //assignment on empty tree
-  rbt<double> dt1 = dt;
-  rbt<float> ft1 = ft;
-  rbt<char> ct1 = ct;
-  rbt<string> st1 = st;
+  rbt<int> it1 = it3;   //assignment on empty tree
+  rbt<double> dt1 = dt3;
+  rbt<float> ft1 = ft3;
+  rbt<char> ct1 = ct3;
+  rbt<string> st1 = st3;
 
   assert(!it1.empty()); //making it sure it is not empty
   assert(!dt1.empty());
@@ -262,76 +188,52 @@ void test_rbt_assingment(){
   // assert(!st1.empty());
 }
 
-template<class T>
-void test_rbt_get(rbt<T> &tree, T a, T b){
+void test_rbt_get(){
   rbt<int> it;
   rbt<double> dt;
   rbt<float> ft;
   rbt<char> ct;
   rbt<string> st;
 
-  assert(it.empty()); //making it sure it is emtpy
+  assert(it.empty());  //initial creation has to be empty
   assert(dt.empty());
   assert(ft.empty());
   assert(ct.empty());
   assert(st.empty());
 
-  int *ia = new int(41);
-  int *ib = new int(44);
-  double *da = new double(31.0);
-  double *db = new double(39.0);
-  float *fa = new float(31.0f);
-  float *fb = new float(39.0f);
-  char *ca = new char('x');
-  char *cb = new char('f');
-  string *sa = new string("Hello World!");
-  string *sb = new string("o World!");
+  int iArr[6] = {50, 30, 40, 10, 5, 70};
+  double dArr[6] = {50.0, 30.0, 40.0, 10.0, 5.0, 70.0};
+  float fArr[6] = {50.0f, 30.0f, 40.0f, 10.0f, 5.0f, 70.0f};
+  char cArr[6] = {'z','f','g', 'a', 'b', 'x'};
+  string sArr[6] = {"Hello","World","Hel","lo","rld", "d"};
 
-  it.insert(ia);       //inserting
-  dt.insert(da);
-  ft.insert(fa);
-  ct.insert(ca);
-  st.insert(sa);
+  for (int i = 0;i < 6; i++){
+    it.insert(iArr + i);
+    dt.insert(dArr + i);
+    ft.insert(fArr + i);
+    ct.insert(cArr + i);
+    st.insert(sArr + i);
+    assert(*it.get(iArr[i]) == iArr[i]);
+    assert(*dt.get(dArr[i]) == dArr[i]);
+    assert(*ft.get(fArr[i]) == fArr[i]);
+    assert(*ct.get(cArr[i]) == cArr[i]);
+    assert(*st.get(sArr[i]) == sArr[i]);
+  }
 
-  it.insert(ib);       //inserting
-  dt.insert(db);
-  ft.insert(fb);
-  ct.insert(cb);
-  st.insert(sb);
-
-  assert(!it.empty()); //making it sure it is not empty
+  assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
   assert(!ft.empty());
   assert(!ct.empty());
   assert(!st.empty());
-
-  assert(*(it.get(*ia)) == *ia && *(it.get(*ib)) == *ib);
-  assert(*(dt.get(*da)) == *da && *(dt.get(*db)) == *db);
-  assert(*(ft.get(*fa)) == *fa && *(ft.get(*fb)) == *fb);
-  assert(*(ct.get(*ca)) == *ca && *(ct.get(*cb)) == *cb);
-  assert(*(st.get(*sa)) == *sa && *(st.get(*sb)) == *sb);
-
-  delete ia;           //freeing memory
-  delete ib;
-  delete da;
-  delete db;
-  delete fa;
-  delete fb;
-  delete ca;
-  delete cb;
-  delete sa;
-  delete sb;
 }
 
 int main(int argc, char const *argv[]) {
-  //destructor isn't working
-
   LOG1("RBT class test init");
-  test_node_constructors_toStr(); //test node constructor, destructor and toStr;
-  test_rbt_constructors_1();      //test rbt constructors
-  // test_rbt_insert();              //testing insert
-  // test_rbt_constructors_2();         //testing copy constructor on non-empty tree         
-  // test_rbt_assingment();             //testing assignment operator
+  test_node_constructors_toStr();    //test node constructor, destructor and toStr;
+  test_rbt_constructors();           //testing rbt constructor
+  test_rbt_insert();                 //testing insert
+  test_rbt_get();                    //testing get         
+  test_rbt_assingment();             //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
 }

@@ -21,13 +21,12 @@ node<T>::node(T* item, bool *colour, node<T>* p, node<T>* r, node<T>* l){
     this->l = l;
 }
 
-template<class T>//destructor
-node<T>::~node(){
-  if (key != NULL)
-    delete key;
-  if (colour != NULL)
-    delete colour;
-}
+// template<class T>//destructor
+// node<T>::~node(){
+//   if (key != NULL)
+//     delete key;
+  
+// }
 
 template<class T>
 string node<T>::toStr() const{
@@ -118,63 +117,88 @@ void rbt<T>::insert(T* item){
     }
 
     //setting up new node z
-    node<T>* z = new node<T>(item, new bool(R), y, NULL, NULL);
+    node<T>* z = new node<T>(item, new bool(R));
+    z->p = y;
+    z->r = z->l = NULL;
     if (y == NULL)                                     //if empty tree
       root = z;                                        //z is root
     else if (*item < *(y->key))                        //if item smaller than root
       y->l = z;                                        //left tree
     else                                               //if bigger
       y->r = z;                                        //right tree
-  
+    
     insert_fix(z);                                     //fix up colour of tree
 }
 
 template<class T>
 void rbt<T>::insert_fix(node<T> *n){
   /*
-    this function fixes up the color of node
-    in order to keep the properties of red black tree.
-
-    PreCondition: input node z should not be null.
+    Repositioning and Recolouring
   */
-  bool n_p_color = (n->p == NULL)?B:*(n->p->colour);
-  while (n_p_color == R){
-    node<T>* y;
+  bool n_p_colour = (n->p == NULL)?B:*(n->p->colour); 
+  while (n_p_colour == R){
+    node<T> *y;
+    bool y_colour;
     if (n->p == n->p->p->l){
-      y = n->p->p->r;
-      bool y_color = (y == NULL)?B:*(y->colour);
-      cout << 1 << endl; 
-      if (y_color == R){
-        *(n->p->colour) = B;
-        *(y->colour) = B;
+      y = n->p->p->l;
+      y_colour = (y == NULL)?B:*(y->colour);
+      if (y_colour == R){
+        *(n->p->colour) = *(y->colour) = B;
         *(n->p->p->colour) = R;
         n = n->p->p;
+        
       }else if (n == n->p->r){
         n = n->p;
         leftRotate(n);
       }
-      *(n->p->colour) = B;
-      *(n->p->p->colour) = R;
-      rightRotate(n->p->p);
-    }else{
-      y = n->p->p->l;
-      bool y_color = (y == NULL)?B:*(y->colour);
-      cout << 2 << endl; 
-      if (y_color == R){
+      
+      if (n->p != NULL){
         *(n->p->colour) = B;
-        *(y->colour) = B;
+        if (n->p->p != NULL){
+          *(n->p->p->colour) = R;
+        }
+      }
+      
+      if (n->p != NULL){
+        if (n->p->p != NULL){
+          rightRotate(n->p->p);    
+        }else{
+          rightRotate(n->p);
+        }
+      }
+      
+    }else{
+      y = n->p->p->r;
+      y_colour = (y == NULL)?B:*(y->colour);
+      if (y_colour == R){
+        *(n->p->colour) = *(y->colour) = B;
         *(n->p->p->colour) = R;
         n = n->p->p;
       }else if (n == n->p->l){
         n = n->p;
         rightRotate(n);
       }
-      *(n->p->colour) = B;
-      *(n->p->p->colour) = R;
-      leftRotate(n->p->p);
+
+     if (n->p != NULL){
+        *(n->p->colour) = B;
+        if (n->p->p != NULL){
+          *(n->p->p->colour) = R;
+        }
+      }
+     
+      if (n->p != NULL){
+        if (n->p->p != NULL){
+          leftRotate(n->p->p);    
+        }else{
+          leftRotate(n->p);
+        }
+      }
+      
     }
+    n_p_colour = (n->p == NULL)?B:*(n->p->colour);
   }
-  *(root->colour) = B;//change root node colour to black
+
+  *(root->colour) = B;
 }
 
 template<class T>
