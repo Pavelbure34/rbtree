@@ -64,15 +64,6 @@ rbt<T>::rbt(const rbt<T> &tree){
   deepCopy(tree.getRoot()); //recursively coping node by node
 }
 
-template<class T>
-void rbt<T>::operator=(rbt<T> &tree){
-  /*
-    this operator rewrites the tree.
-  */
-  destroy(root);
-  deepCopy(tree.getRoot());
-}
-
 template<class T>//destructor
 rbt<T>::~rbt(){
     destroy(root);
@@ -193,7 +184,7 @@ void rbt<T>::insert_fix(node<T> *n){
           leftRotate(n->p);
         }
       }
-      
+
     }
     n_p_colour = (n->p == NULL)?B:*(n->p->colour);
   }
@@ -281,16 +272,30 @@ node<T>* rbt<T>::getRoot() const{
 }
 
 template<class T>
+void rbt<T>::operator=(rbt<T> &tree){
+  /*
+    this operator rewrites the tree.
+  */
+  destroy(root);
+  // deepCopy(tree.getRoot());
+  // cout << 'a' << endl;
+}
+
+template<class T>
 void rbt<T>::deepCopy(node<T> *n) {
    /*
         this function recursively copy node by node.
 
         Pre-condition: input n has to be not NULL.
    */
+  cout << "n:" << (n == NULL) << endl;
   if(n != NULL){
     insert(n->key);
+    cout << 1 << endl;
     deepCopy(n->l);
+    cout << 2 << endl;
     deepCopy(n->r);
+    cout << 3 << endl;
   }
 }
 
@@ -302,12 +307,11 @@ void rbt<T>::destroy(node<T> *n){
     Pre-condition: input n has to be not NULL.
   */
   if (n != NULL) {
-    // cout << (n->l == NULL) << endl;
+    cout << *n << endl;
     destroy(n->l); //delete left and right nodes first
-    // cout << (n->r == NULL) << endl;
     destroy(n->r);
-    // cout << (n == NULL) << endl;
     delete n;      //then delete itself
+    //deletion not working?
   }
 }
 

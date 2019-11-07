@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include "exceptions.h"
+#include "assert.h"
 using namespace std;
 
 //represeting red and black with boolean value

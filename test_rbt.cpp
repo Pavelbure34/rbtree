@@ -163,19 +163,19 @@ void test_rbt_assingment(){
     assert(*st3.get(sArr[i]) == sArr[i]);
   }
 
-  rbt<int> it1 = it3;   //assignment on empty tree
-  rbt<double> dt1 = dt3;
-  rbt<float> ft1 = ft3;
-  rbt<char> ct1 = ct3;
-  rbt<string> st1 = st3;
+  // rbt<int> it1 = it3;   //assignment on empty tree
+  // rbt<double> dt1 = dt3;
+  // rbt<float> ft1 = ft3;
+  // rbt<char> ct1 = ct3;
+  // rbt<string> st1 = st3;
 
-  assert(!it1.empty()); //making it sure it is not empty
-  assert(!dt1.empty());
-  assert(!ft1.empty());
-  assert(!ct1.empty());
-  assert(!st1.empty());
+  // assert(!it1.empty()); //making it sure it is not empty
+  // assert(!dt1.empty());
+  // assert(!ft1.empty());
+  // assert(!ct1.empty());
+  // assert(!st1.empty());
 
-  // it1 = it1;            //assignment on non-empty tree core dump here
+  it3 = it3;            //assignment on non-empty tree core dump here
   // dt1 = dt1;
   // ft1 = ft1;
   // ct1 = ct1;
@@ -213,7 +213,7 @@ void test_rbt_get(){
     ft.insert(fArr + i);
     ct.insert(cArr + i);
     st.insert(sArr + i);
-    assert(*it.get(iArr[i]) == iArr[i]);
+    assert(*it.get(iArr[i]) == iArr[i]); //confirming insertion
     assert(*dt.get(dArr[i]) == dArr[i]);
     assert(*ft.get(fArr[i]) == fArr[i]);
     assert(*ct.get(cArr[i]) == cArr[i]);
@@ -229,10 +229,10 @@ void test_rbt_get(){
 
 int main(int argc, char const *argv[]) {
   LOG1("RBT class test init");
-  test_node_constructors_toStr();    //test node constructor, destructor and toStr;
-  test_rbt_constructors();           //testing rbt constructor
-  test_rbt_insert();                 //testing insert
-  test_rbt_get();                    //testing get         
+  // test_node_constructors_toStr();    //test node constructor, destructor and toStr;
+  // test_rbt_constructors();           //testing rbt constructor
+  // test_rbt_insert();                 //testing insert
+  // test_rbt_get();                    //testing get         
   test_rbt_assingment();             //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
