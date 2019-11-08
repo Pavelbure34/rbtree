@@ -274,12 +274,23 @@ void test_rbt_get(){
 }
 
 int main(int argc, char const *argv[]) {
-  LOG1("RBT class test init");
+  rbt<int> it;
+  int iArr[6] = {41, 38, 31, 12, 19, 8};
+
+  for (int i = 0;i < 3; i++){
+    it.insert(iArr + i);
+    assert(*it.get(iArr[i]) == iArr[i]); 
+  }
+
+  //testing colour of the node,
+  cout << it.preOrder() << endl;
+ 
+  // LOG1("RBT class test init");
   // test_node_constructors_toStr();    //test node constructor, destructor and toStr;
   // test_rbt_constructors();           //testing rbt constructor
-  test_rbt_insert();                 //testing insert
+  // test_rbt_insert();                 //testing insert
   // test_rbt_get();                    //testing get         
   // test_rbt_assingment();             //testing assignment operator
-  LOG1("RBT class test complete");
+  // LOG1("RBT class test complete");
   return 0;
 }
