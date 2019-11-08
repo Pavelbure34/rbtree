@@ -17,16 +17,20 @@ node<T>::node(T* item, bool *colour, node<T>* p, node<T>* r, node<T>* l){
     else
       this->colour = new bool;
 
+    this->p = p;
     this->r = r;
     this->l = l;
 }
 
-// template<class T>//destructor
-// node<T>::~node(){
-//   if (key != NULL)
-//     delete key;
-  
-// }
+template<class T>
+node<T>::~node(){
+  // cout << *colour << endl;
+  // cout << *key << endl;
+  // if (key != NULL) delete key;
+  // if (colour != NULL) delete colour;
+  // assert(this->key == NULL);
+  // assert(this->colour == NULL);
+}
 
 template<class T>
 string node<T>::toStr() const{
@@ -84,6 +88,9 @@ T* rbt<T>::get(T item) const{
 
     PreCondition: tree has to be initialized.
   */
+  if (root == NULL)
+    throw new emptyTreeException;
+
   node<T> *temp = getNode(root, &item);
   if (temp == NULL)
     throw new noKeyException;
@@ -109,15 +116,16 @@ void rbt<T>::insert(T* item){
 
     //setting up new node z
     node<T>* z = new node<T>(item, new bool(R));
-    z->p = y;
+    z->p = (y != NULL)?y:NULL;
     z->r = z->l = NULL;
     if (y == NULL)                                     //if empty tree
       root = z;                                        //z is root
-    else if (*item < *(y->key))                        //if item smaller than root
+    else if (*item < *(y->key)){                       //if item smaller than root
       y->l = z;                                        //left tree
-    else                                               //if bigger
+    }else{                                             //if bigger
       y->r = z;                                        //right tree
-    
+    }
+
     insert_fix(z);                                     //fix up colour of tree
 }
 
@@ -125,12 +133,13 @@ template<class T>
 void rbt<T>::insert_fix(node<T> *n){
   /*
     Repositioning and Recolouring
+    PreCondition: input n should not be null.
   */
   bool n_p_colour = (n->p == NULL)?B:*(n->p->colour); 
   while (n_p_colour == R){
     node<T> *y;
     bool y_colour;
-    if (n->p == n->p->p->l){
+    if (n->p == n->p->p->l){ //if parent equals to parent's uncle
       y = n->p->p->l;
       y_colour = (y == NULL)?B:*(y->colour);
       if (y_colour == R){
@@ -140,7 +149,8 @@ void rbt<T>::insert_fix(node<T> *n){
         
       }else if (n == n->p->r){
         n = n->p;
-        leftRotate(n);
+        if (n != NULL)
+          leftRotate(n);
       }
       
       if (n->p != NULL){
@@ -153,11 +163,9 @@ void rbt<T>::insert_fix(node<T> *n){
       if (n->p != NULL){
         if (n->p->p != NULL){
           rightRotate(n->p->p);    
-        }else{
-          rightRotate(n->p);
         }
       }
-      
+      // rightRotate(n->p->p);
     }else{
       y = n->p->p->r;
       y_colour = (y == NULL)?B:*(y->colour);
@@ -167,7 +175,8 @@ void rbt<T>::insert_fix(node<T> *n){
         n = n->p->p;
       }else if (n == n->p->l){
         n = n->p;
-        rightRotate(n);
+        if (n != NULL)
+          rightRotate(n);
       }
 
      if (n->p != NULL){
@@ -180,13 +189,12 @@ void rbt<T>::insert_fix(node<T> *n){
       if (n->p != NULL){
         if (n->p->p != NULL){
           leftRotate(n->p->p);    
-        }else{
-          leftRotate(n->p);
         }
       }
-
+      // leftRotate(n->p->p);
     }
     n_p_colour = (n->p == NULL)?B:*(n->p->colour);
+    // cout << n_p_colour << endl;
   }
 
   *(root->colour) = B;
@@ -277,25 +285,20 @@ void rbt<T>::operator=(rbt<T> &tree){
     this operator rewrites the tree.
   */
   destroy(root);
-  // deepCopy(tree.getRoot());
-  // cout << 'a' << endl;
+  root = NULL;
+  deepCopy(tree.getRoot());
 }
 
 template<class T>
 void rbt<T>::deepCopy(node<T> *n) {
    /*
         this function recursively copy node by node.
-
         Pre-condition: input n has to be not NULL.
    */
-  cout << "n:" << (n == NULL) << endl;
-  if(n != NULL){
+  if(n != NULL && n->key != NULL){
     insert(n->key);
-    cout << 1 << endl;
     deepCopy(n->l);
-    cout << 2 << endl;
     deepCopy(n->r);
-    cout << 3 << endl;
   }
 }
 
@@ -307,11 +310,10 @@ void rbt<T>::destroy(node<T> *n){
     Pre-condition: input n has to be not NULL.
   */
   if (n != NULL) {
-    cout << *n << endl;
+    // cout << *n << endl;
     destroy(n->l); //delete left and right nodes first
     destroy(n->r);
     delete n;      //then delete itself
-    //deletion not working?
   }
 }
 
@@ -413,6 +415,7 @@ node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
     else
       n = n->l;
   }
+
   return n;
 }
 

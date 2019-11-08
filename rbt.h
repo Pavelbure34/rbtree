@@ -18,15 +18,15 @@ using namespace std;
 template<class T>
 class node{
 public:
-    T* key;        //pointer to key for tree
-    bool* colour;  //colour value for node
-    node<T> *p;    //pointer to the parent node
-    node<T> *r;    //pointer to the right child node
-    node<T>* l;    //pointer to the left child node
+    T* key;                       //pointer to key for tree
+    bool* colour;                 //colour value for node
+    node<T> *p;                   //pointer to the parent node
+    node<T> *r;                   //pointer to the right child node
+    node<T>* l;                   //pointer to the left child node
 
     node(T* item = NULL, bool *colour = NULL, node<T>* p = NULL,
      node<T>* r = NULL, node<T>* l = NULL);  //constructor
-    // ~node();                                 //destructor
+    ~node();
 
     string toStr() const;                    //toString method
     friend ostream& operator<<(ostream &o, node<T> &n){
@@ -39,7 +39,7 @@ public:
 template<class T>
 class rbt{
 protected:
-    node<T> *root;
+    node<T> *root; 
 
 public:
     rbt();                                         //default constructor #1

@@ -90,11 +90,11 @@ void test_rbt_constructors(){
   rbt<char> ct2(ct);
   rbt<string> st2(st);
 
-  assert(!it2.empty()); //making it sure it is not empty
-  assert(!dt2.empty());
-  assert(!ft2.empty());
-  assert(!ct2.empty());
-  assert(!st2.empty());
+  assert(it2.preOrder() == it.preOrder()); //making it sure it is not empty
+  assert(dt2.preOrder() == dt.preOrder());
+  assert(ft2.preOrder() == ft.preOrder());
+  assert(ct2.preOrder() == ct.preOrder());
+  assert(st2.preOrder() == st.preOrder());
 }
 
 void test_rbt_insert(){
@@ -122,7 +122,18 @@ void test_rbt_insert(){
     ft.insert(fArr + i);
     ct.insert(cArr + i);
     st.insert(sArr + i);
+    assert(*it.get(*(iArr + i)) == *(iArr + i)); //confirming insertion
+    assert(*dt.get(*(dArr + i)) == *(dArr + i));
+    assert(*ft.get(*(fArr + i)) == *(fArr + i));
+    assert(*ct.get(*(cArr + i)) == *(cArr + i));
+    assert(*st.get(*(sArr + i)) == *(sArr + i));
   }
+
+  // cout << it.preOrder() << endl;
+  // cout << dt.preOrder() << endl;
+  // cout << ft.preOrder() << endl;
+  // cout << ct.preOrder() << endl;
+  // cout << st.preOrder() << endl;
   
   assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
@@ -163,29 +174,29 @@ void test_rbt_assingment(){
     assert(*st3.get(sArr[i]) == sArr[i]);
   }
 
-  // rbt<int> it1 = it3;   //assignment on empty tree
-  // rbt<double> dt1 = dt3;
-  // rbt<float> ft1 = ft3;
-  // rbt<char> ct1 = ct3;
-  // rbt<string> st1 = st3;
+  rbt<int> it1 = it3;   //assignment on empty tree
+  rbt<double> dt1 = dt3;
+  rbt<float> ft1 = ft3;
+  rbt<char> ct1 = ct3;
+  rbt<string> st1 = st3;
 
-  // assert(!it1.empty()); //making it sure it is not empty
-  // assert(!dt1.empty());
-  // assert(!ft1.empty());
-  // assert(!ct1.empty());
-  // assert(!st1.empty());
+  assert(it1.inOrder() == it3.inOrder()); //making it sure it is not empty
+  assert(dt1.inOrder() == dt3.inOrder());
+  assert(ft1.inOrder() == ft3.inOrder());
+  assert(ct1.inOrder() == ct3.inOrder());
+  assert(st1.inOrder() == st3.inOrder());
 
-  it3 = it3;            //assignment on non-empty tree core dump here
-  // dt1 = dt1;
-  // ft1 = ft1;
-  // ct1 = ct1;
-  // st1 = st1;
+  it1 = it3;            //assignment on non-empty tree core dump here
+  dt1 = dt3;
+  ft1 = ft3;
+  ct1 = ct3;
+  st1 = st3;
 
-  // assert(!it1.empty()); //making it sure it is not empty
-  // assert(!dt1.empty());
-  // assert(!ft1.empty());
-  // assert(!ct1.empty());
-  // assert(!st1.empty());
+  assert(it1.inOrder() == it3.inOrder()); //making it sure it is not empty
+  assert(dt1.inOrder() == dt3.inOrder());
+  assert(ft1.inOrder() == ft3.inOrder());
+  assert(ct1.inOrder() == ct3.inOrder());
+  assert(st1.inOrder() == st3.inOrder());
 }
 
 void test_rbt_get(){
@@ -194,6 +205,23 @@ void test_rbt_get(){
   rbt<float> ft;
   rbt<char> ct;
   rbt<string> st;
+
+  //testing get on empty tree to produce an exception
+  try{
+    it.get(10);
+  }catch(emptyTreeException *e){}
+  try{
+    dt.get(10.0);
+  }catch(emptyTreeException *e){}
+  try{
+    ft.get(10.0f);
+  }catch(emptyTreeException *e){}
+  try{
+    ct.get('a');
+  }catch(emptyTreeException *e){}
+  try{
+    st.get("10");
+  }catch(emptyTreeException *e){}
 
   assert(it.empty());  //initial creation has to be empty
   assert(dt.empty());
@@ -220,6 +248,23 @@ void test_rbt_get(){
     assert(*st.get(sArr[i]) == sArr[i]);
   }
 
+  //testing get to throw noKeyException
+  try{
+    it.get(100);
+  }catch(noKeyException *e){}
+  try{
+    dt.get(100.0);
+  }catch(noKeyException *e){}
+  try{
+    ft.get(100.0f);
+  }catch(noKeyException *e){}
+  try{
+    ct.get('c');
+  }catch(noKeyException *e){}
+  try{
+    st.get("el");
+  }catch(noKeyException *e){}
+
   assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
   assert(!ft.empty());
@@ -229,10 +274,10 @@ void test_rbt_get(){
 
 int main(int argc, char const *argv[]) {
   LOG1("RBT class test init");
-  // test_node_constructors_toStr();    //test node constructor, destructor and toStr;
-  // test_rbt_constructors();           //testing rbt constructor
-  // test_rbt_insert();                 //testing insert
-  // test_rbt_get();                    //testing get         
+  test_node_constructors_toStr();    //test node constructor, destructor and toStr;
+  test_rbt_constructors();           //testing rbt constructor
+  test_rbt_insert();                 //testing insert
+  test_rbt_get();                    //testing get         
   test_rbt_assingment();             //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
