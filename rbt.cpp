@@ -23,20 +23,9 @@ node<T>::node(T* item, bool *colour, node<T>* p, node<T>* r, node<T>* l){
 }
 
 template<class T>
-node<T>::~node(){
-  // cout << *colour << endl;
-  // cout << *key << endl;
-  // if (key != NULL) delete key;
-  // if (colour != NULL) delete colour;
-  // assert(this->key == NULL);
-  // assert(this->colour == NULL);
-}
-
-template<class T>
 string node<T>::toStr() const{
   /*
     this function prints out node element.
-
     Pre-Condition:node has to be not-null
   */
   string col = (*colour == R)?"r":"b";
@@ -135,37 +124,29 @@ void rbt<T>::insert_fix(node<T> *n){
     Repositioning and Recolouring
     PreCondition: input n should not be null.
   */
-  bool n_p_colour = (n->p == NULL)?B:*(n->p->colour); 
+  bool n_p_colour = (n->p == NULL)?B:*(n->p->colour);//NULL pointer error protection
   while (n_p_colour == R){
     node<T> *y;
     bool y_colour;
     if (n->p == n->p->p->l){ //if parent equals to parent's uncle
       y = n->p->p->l;
-      y_colour = (y == NULL)?B:*(y->colour);
+      y_colour = (y == NULL)?B:*(y->colour); //NULL pointer error protection
       if (y_colour == R){
         *(n->p->colour) = *(y->colour) = B;
         *(n->p->p->colour) = R;
         n = n->p->p;
-        
       }else if (n == n->p->r){
         n = n->p;
-        if (n != NULL)
-          leftRotate(n);
+        leftRotate(n);
       }
-      
-      if (n->p != NULL){
+
+      if (n->p != NULL){           //NULL pointer error protection
         *(n->p->colour) = B;
-        if (n->p->p != NULL){
+        if (n->p->p != NULL){      //NULL pointer error protection
           *(n->p->p->colour) = R;
+          rightRotate(n->p->p);
         }
       }
-      
-      if (n->p != NULL){
-        if (n->p->p != NULL){
-          rightRotate(n->p->p);    
-        }
-      }
-      // rightRotate(n->p->p);
     }else{
       y = n->p->p->r;
       y_colour = (y == NULL)?B:*(y->colour);
@@ -175,29 +156,22 @@ void rbt<T>::insert_fix(node<T> *n){
         n = n->p->p;
       }else if (n == n->p->l){
         n = n->p;
-        if (n != NULL)
-          rightRotate(n);
+        rightRotate(n);
       }
 
-     if (n->p != NULL){
+     if (n->p != NULL){             //NULL pointer error protection
         *(n->p->colour) = B;
-        if (n->p->p != NULL){
+        if (n->p->p != NULL){      //NULL pointer error protection
           *(n->p->p->colour) = R;
+          leftRotate(n->p->p);
         }
       }
-     
-      if (n->p != NULL){
-        if (n->p->p != NULL){
-          leftRotate(n->p->p);    
-        }
-      }
-      // leftRotate(n->p->p);
     }
-    n_p_colour = (n->p == NULL)?B:*(n->p->colour);
-    // cout << n_p_colour << endl;
+
+    n_p_colour = (n->p == NULL)?B:*(n->p->colour);//updating  n_p_colour
   }
 
-  *(root->colour) = B;
+  *(root->colour) = B;                            //making the root as colour black
 }
 
 template<class T>
@@ -266,6 +240,26 @@ void rbt<T>::leftRotate(node<T> *n){
 
 // template<class T>
 // void rbt<T>::remove(T &item){
+//   node<T> *z = getNode(item);
+//   node<T> *y, *x;
+//   if (z == NULL)
+//     throw new noKeyException;
+
+//   if (z->l == NULL || z->r == NULL){
+//     y = z;
+//   }else{
+//     y = getNode(*succ(new T(item)));
+//   }
+
+//   if (y->l != NULL){
+//     x = y->l;
+//   }else{
+//     x = y->r;
+//   }
+// }
+
+// template<class T>
+// void rbt<T>::remove_fix(node<T>* n){
 
 // }
 
@@ -427,6 +421,12 @@ int rbt<T>::bh(node<T>* n) const{
 
 template<class T>
 string rbt<T>::getInOrder(node<T>* x) const{
+  /*
+    this function is helper method for inOrder function.
+    utilizing node's toStr() function
+
+    PreCondition: x should not be null.
+  */
   if(x == NULL)
     return "";
   else
@@ -436,6 +436,12 @@ string rbt<T>::getInOrder(node<T>* x) const{
 
 template<class T>
 string rbt<T>::getPreOrder(node<T> *x) const{
+  /*
+    this function is helper method for preOrder function.
+    utilizing node's toStr() function
+
+    PreCondition: x should not be null.
+  */
   if(x == NULL)
     return "";
   else
@@ -444,6 +450,12 @@ string rbt<T>::getPreOrder(node<T> *x) const{
 
 template<class T>
 string rbt<T>::getPostOrder(node<T> *x) const{
+   /*
+    this function is helper method for postOrder function.
+    utilizing node's toStr() function
+
+    PreCondition: x should not be null.
+  */
   if(x == NULL)
     return "";
   else
@@ -452,16 +464,25 @@ string rbt<T>::getPostOrder(node<T> *x) const{
 
 template<class T>
 string rbt<T>::inOrder() const{
+  /*
+    this function prints out the tree inOrder travelsal
+  */
   return getInOrder(root);
 }
 
 template<class T>
 string rbt<T>::preOrder() const{
+  /*
+    this function prints out the tree preOrder travelsal
+  */
   return getPreOrder(root);
 }
 
 
 template<class T>
 string rbt<T>::postOrder() const{
+   /*
+    this function prints out the tree postOrder travelsal
+  */
   return getPostOrder(root);
 }

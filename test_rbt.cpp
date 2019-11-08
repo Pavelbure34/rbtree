@@ -90,11 +90,11 @@ void test_rbt_constructors(){
   rbt<char> ct2(ct);
   rbt<string> st2(st);
 
-  assert(it2.preOrder() == it.preOrder()); //making it sure it is not empty
-  assert(dt2.preOrder() == dt.preOrder());
-  assert(ft2.preOrder() == ft.preOrder());
-  assert(ct2.preOrder() == ct.preOrder());
-  assert(st2.preOrder() == st.preOrder());
+  assert(it2.postOrder() == it.postOrder()); //making it sure it is not empty
+  assert(dt2.postOrder() == dt.postOrder());
+  assert(ft2.postOrder() == ft.postOrder());
+  assert(ct2.postOrder() == ct.postOrder());
+  assert(st2.postOrder() == st.postOrder());
 }
 
 void test_rbt_insert(){
@@ -129,11 +129,12 @@ void test_rbt_insert(){
     assert(*st.get(*(sArr + i)) == *(sArr + i));
   }
 
-  // cout << it.preOrder() << endl;
-  // cout << dt.preOrder() << endl;
-  // cout << ft.preOrder() << endl;
-  // cout << ct.preOrder() << endl;
-  // cout << st.preOrder() << endl;
+  //testing colour of the node,
+  cout << it.preOrder() << endl;
+  cout << dt.preOrder() << endl;
+  cout << ft.preOrder() << endl;
+  cout << ct.preOrder() << endl;
+  cout << st.preOrder() << endl;
   
   assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
@@ -180,15 +181,15 @@ void test_rbt_assingment(){
   rbt<char> ct1 = ct3;
   rbt<string> st1 = st3;
 
-  assert(it1.inOrder() == it3.inOrder()); //making it sure it is not empty
-  assert(dt1.inOrder() == dt3.inOrder());
-  assert(ft1.inOrder() == ft3.inOrder());
-  assert(ct1.inOrder() == ct3.inOrder());
-  assert(st1.inOrder() == st3.inOrder());
+  assert(it1.preOrder() == it3.preOrder()); //making it sure it is not empty
+  assert(dt1.preOrder() == dt3.preOrder());
+  assert(ft1.preOrder() == ft3.preOrder());
+  assert(ct1.preOrder() == ct3.preOrder());
+  assert(st1.preOrder() == st3.preOrder());
 
-  it1 = it3;            //assignment on non-empty tree core dump here
-  dt1 = dt3;
-  ft1 = ft3;
+  it1 = it3;    //assignment on non-empty tree
+  dt1 = dt3;    //destroy is called to free the memory
+  ft1 = ft3;    //then deepcopy is called to rewrite the tree.
   ct1 = ct3;
   st1 = st3;
 
@@ -274,11 +275,11 @@ void test_rbt_get(){
 
 int main(int argc, char const *argv[]) {
   LOG1("RBT class test init");
-  test_node_constructors_toStr();    //test node constructor, destructor and toStr;
-  test_rbt_constructors();           //testing rbt constructor
+  // test_node_constructors_toStr();    //test node constructor, destructor and toStr;
+  // test_rbt_constructors();           //testing rbt constructor
   test_rbt_insert();                 //testing insert
-  test_rbt_get();                    //testing get         
-  test_rbt_assingment();             //testing assignment operator
+  // test_rbt_get();                    //testing get         
+  // test_rbt_assingment();             //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
 }

@@ -26,7 +26,6 @@ public:
 
     node(T* item = NULL, bool *colour = NULL, node<T>* p = NULL,
      node<T>* r = NULL, node<T>* l = NULL);  //constructor
-    ~node();
 
     string toStr() const;                    //toString method
     friend ostream& operator<<(ostream &o, node<T> &n){
@@ -49,7 +48,7 @@ public:
     bool empty() const;                            //returns true if empty
     T* get(T item) const;                          //returns the pointer to value
     void insert(T* item);                          //insert the item
-    // void remove(T &item);                       //remove the item
+    // void remove(T &item);                          //remove the item
 
     T* succ(T* key) const;                         //get the successor
     T* predec(T* key) const;                       //get the predecessor
@@ -64,6 +63,7 @@ public:
 
 protected:
     void insert_fix(node<T>* n);                   //helper function for insert
+    // void remove_fix(node<T>* n);                   //helper function for remove
     void rightRotate(node<T> *n);                  //right rotate the tree
     void leftRotate(node<T> *n);                   //left rotate the tree
     // void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
