@@ -8,7 +8,6 @@
 #include <string>
 #include <sstream>
 #include "exceptions.h"
-#include "assert.h"
 using namespace std;
 
 //represeting red and black with boolean value
@@ -76,7 +75,7 @@ protected:
 
     void destroy(node<T> *n);                     //helper function for clearing memory.
     void deepCopy(node<T> *n);                    //helper function for copy
-    node<T>* getNode(node<T>* n, T* key) const;//returning target node.
+    node<T>* getNode(node<T>* n, T* key) const;   //returning target node.
 };
 #include "rbt.cpp"
 #endif
