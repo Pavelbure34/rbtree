@@ -32,4 +32,12 @@ public:
         return "tree is empty.";
     }
 };
+
+class notRBTException: public exception{
+public:
+    const char* what() const throw(){
+        return "tree black height therorem violated.";
+    }
+};
+
 #endif

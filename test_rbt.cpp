@@ -287,11 +287,11 @@ int main(int argc, char const *argv[]) {
   // cout << it.preOrder() << endl;
  
   LOG1("RBT class test init");
-  test_node_constructors_toStr();    //test node constructor, destructor and toStr;
-  test_rbt_constructors();           //testing rbt constructor
-  test_rbt_insert();                 //testing insert
-  test_rbt_get();                    //testing get         
-  test_rbt_assingment();             //testing assignment operator
+  test_node_constructors_toStr();  //test node constructor, destructor and toStr;
+  test_rbt_constructors();         //testing rbt constructor
+  test_rbt_insert();               //testing insert
+  test_rbt_get();                  //testing get         
+  test_rbt_assingment();           //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
 }

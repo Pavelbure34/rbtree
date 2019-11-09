@@ -229,157 +229,157 @@ void rbt<T>::leftRotate(node<T> *n){
   n->p = y;
 }
 
-template<class T>
-void rbt<T>::rbt_transplant(node<T> *u, node<T> *v){
-  /*
-    this function transplant tree for removal.
+// template<class T>
+// void rbt<T>::rbt_transplant(node<T> *u, node<T> *v){
+//   /*
+//     this function transplant tree for removal.
 
-    PreCondition: input nodes u and v should not be NULL.
-  */
-  if (u->p == NULL)     //case I:a tree has single node
-    root = v;
-  else if (u == u->p->l)//case II:
-    u->p->l = v;
-  else                  //case III:
-    u->p->r = v;
-  v->p = u->p;          //setting up the parent equal
-}
+//     PreCondition: input nodes u and v should not be NULL.
+//   */
+//   if (u->p == NULL)     //case I:a tree has single node
+//     root = v;
+//   else if (u == u->p->l)//case II:
+//     u->p->l = v;
+//   else                  //case III:
+//     u->p->r = v;
+//   v->p = u->p;          //setting up the parent equal
+// }
 
-template<class T>
-void rbt<T>::remove(T &item){
-  /*
-    This funciton removes the node from the tree.
-    PreConditions:
-      1. item should exist in the tree.
-      2. tree should be initiated.
-  */
-  node<T> *y, *z, *x;
+// template<class T>
+// void rbt<T>::remove(T &item){
+//   /*
+//     This funciton removes the node from the tree.
+//     PreConditions:
+//       1. item should exist in the tree.
+//       2. tree should be initiated.
+//   */
+//   node<T> *y, *z, *x;
 
-  z = getNod(item);
-  if (z == NULL)
-    throw new noKeyException;
+//   z = getNod(item);
+//   if (z == NULL)
+//     throw new noKeyException;
 
-  y = z;
-  bool y_o_colour = *(y->colour);
-  if (z->l == NULL){
-    x = z->r;
-    rbt_transplant(z, z->r);
-  }else if (z->r == NULL){
-    x = z->l;
-    rbt_transplant(z, z->l);
-  }else{
-    y = getNode(*min(z->r));
-    y_o_colour = *(y->colour);
-    x = y->r;
-    if (y->p == z){
-      x->p = y;
-    }else{
-      rbt_transplant(y, y->r);
-      y->r = z->r;
-      y->r->p = y;
-    }
-    rbt_transplant(z, y);
-    y->l = z->l;
-    y->l->p = y;
-    *(y->colour) = *(z->colour);
-  }
+//   y = z;
+//   bool y_o_colour = *(y->colour);
+//   if (z->l == NULL){
+//     x = z->r;
+//     rbt_transplant(z, z->r);
+//   }else if (z->r == NULL){
+//     x = z->l;
+//     rbt_transplant(z, z->l);
+//   }else{
+//     y = getNode(*min(z->r));
+//     y_o_colour = *(y->colour);
+//     x = y->r;
+//     if (y->p == z){
+//       x->p = y;
+//     }else{
+//       rbt_transplant(y, y->r);
+//       y->r = z->r;
+//       y->r->p = y;
+//     }
+//     rbt_transplant(z, y);
+//     y->l = z->l;
+//     y->l->p = y;
+//     *(y->colour) = *(z->colour);
+//   }
 
-  if (y_o_colour == B){
-    remove_fix(x);
-  } 
-}
+//   if (y_o_colour == B){
+//     remove_fix(x);
+//   } 
+// }
 
-template<class T>
-void rbt<T>::remove_fix(node<T>* n){
-  /*
-    This funciton fix up the node after deletion.
-    PreConditions:
-      1. tree should be initiated.
-      2. n should not be null.
-  */
-  node<T> *w;
-  bool w_l_colour, w_r_colour, n_p_colour, n_colour; 
-  while (n != root && *(n->colour) == B){
-    // if (n->p != NULL)
-    //   if (n->p->l != NULL){//null pointer possible
-        if (n == n->p->l){
-          cout << "a" << endl;
-          w = n->p->r;
-          if (*(w->colour) == R){                         //case 1:
-            cout << "case 1" << endl;
-            *(w->colour) = B;
-            *(n->p->colour) = R;
-            leftRotate(n->p);
-            w = x->p->r;
-          }
-          w_l_colour = (w->l == NULL)?B:*(w->l->colour);
-          w_r_colour = (w->r == NULL)?B:*(w->r->colour);
-          if (w_l_colour == B && w_r_colour == B){        //case 2:
-            cout << "case 2" << endl;
-            *(w->colour) == R;
-            n = n->p;
-          }else if (w_r_colour == B){                     //case 3:
-            cout << "case 3" << endl;
-            if (w->l != NULL)
-              *(w->l->colour) = B;
-            *(w->colour) == R;
-            rightRotate(w);
-            w = (n->p == NULL)?n->r:n->p->r;
-          }
+// template<class T>
+// void rbt<T>::remove_fix(node<T>* n){
+//   /*
+//     This funciton fix up the node after deletion.
+//     PreConditions:
+//       1. tree should be initiated.
+//       2. n should not be null.
+//   */
+//   node<T> *w;
+//   bool w_l_colour, w_r_colour, n_p_colour, n_colour; 
+//   while (n != root && *(n->colour) == B){
+//     // if (n->p != NULL)
+//     //   if (n->p->l != NULL){//null pointer possible
+//         if (n == n->p->l){
+//           cout << "a" << endl;
+//           w = n->p->r;
+//           if (*(w->colour) == R){                         //case 1:
+//             cout << "case 1" << endl;
+//             *(w->colour) = B;
+//             *(n->p->colour) = R;
+//             leftRotate(n->p);
+//             w = x->p->r;
+//           }
+//           w_l_colour = (w->l == NULL)?B:*(w->l->colour);
+//           w_r_colour = (w->r == NULL)?B:*(w->r->colour);
+//           if (w_l_colour == B && w_r_colour == B){        //case 2:
+//             cout << "case 2" << endl;
+//             *(w->colour) == R;
+//             n = n->p;
+//           }else if (w_r_colour == B){                     //case 3:
+//             cout << "case 3" << endl;
+//             if (w->l != NULL)
+//               *(w->l->colour) = B;
+//             *(w->colour) == R;
+//             rightRotate(w);
+//             w = (n->p == NULL)?n->r:n->p->r;
+//           }
       
-          n_p_colour = (n->p == NULL)?B:*(n->p->colour);
-          *(w->colour) == n_p_colour;                     //case 4:
-          cout << "case 4" << endl;
-          if (n->p != NULL)
-            *(n->p->colour) = B;
-          if (w->r != NULL)
-            *(w->r->colour) = B;
-          if (n->p != NULL)
-            leftRotate(n->p);
+//           n_p_colour = (n->p == NULL)?B:*(n->p->colour);
+//           *(w->colour) == n_p_colour;                     //case 4:
+//           cout << "case 4" << endl;
+//           if (n->p != NULL)
+//             *(n->p->colour) = B;
+//           if (w->r != NULL)
+//             *(w->r->colour) = B;
+//           if (n->p != NULL)
+//             leftRotate(n->p);
 
-          n = root;
-        }else{
-          cout << "b" << endl;
-          w = n->p->l;
-          if (*(w->colour) == R){                         //case 1:
-            cout << "case 1" << endl;
-            *(w->colour) = B;
-            *(n->p->colour) = R;
-            rightRotate(n->p);
-            w = x->p->l;
-          }
-          w_l_colour = (w->l == NULL)?B:*(w->l->colour);
-          w_r_colour = (w->r == NULL)?B:*(w->r->colour);
-          if (w_l_colour == B && w_r_colour == B){        //case 2:
-            cout << "case 2" << endl;
-            *(w->colour) == R;
-            n = n->p;
-          }else if (w_l_colour == B){                     //case 3:
-            cout << "case 3" << endl;
-            if (w->r != NULL)
-              *(w->r->colour) = B;
-            *(w->colour) == R;
-            leftRotate(w);
-            w = (n->p == NULL)?n->l:n->p->l;
-          }
+//           n = root;
+//         }else{
+//           cout << "b" << endl;
+//           w = n->p->l;
+//           if (*(w->colour) == R){                         //case 1:
+//             cout << "case 1" << endl;
+//             *(w->colour) = B;
+//             *(n->p->colour) = R;
+//             rightRotate(n->p);
+//             w = x->p->l;
+//           }
+//           w_l_colour = (w->l == NULL)?B:*(w->l->colour);
+//           w_r_colour = (w->r == NULL)?B:*(w->r->colour);
+//           if (w_l_colour == B && w_r_colour == B){        //case 2:
+//             cout << "case 2" << endl;
+//             *(w->colour) == R;
+//             n = n->p;
+//           }else if (w_l_colour == B){                     //case 3:
+//             cout << "case 3" << endl;
+//             if (w->r != NULL)
+//               *(w->r->colour) = B;
+//             *(w->colour) == R;
+//             leftRotate(w);
+//             w = (n->p == NULL)?n->l:n->p->l;
+//           }
       
-          n_p_colour = (n->p == NULL)?B:*(n->p->colour);
-          *(w->colour) == n_p_colour;                     //case 4:
-          cout << "case 4" << endl;
-          if (n->p != NULL)
-            *(n->p->colour) = B;
-          if (w->l != NULL)
-            *(w->l->colour) = B;
-          if (n->p != NULL)
-            rightRotate(n->p);
+//           n_p_colour = (n->p == NULL)?B:*(n->p->colour);
+//           *(w->colour) == n_p_colour;                     //case 4:
+//           cout << "case 4" << endl;
+//           if (n->p != NULL)
+//             *(n->p->colour) = B;
+//           if (w->l != NULL)
+//             *(w->l->colour) = B;
+//           if (n->p != NULL)
+//             rightRotate(n->p);
 
-          n = root;
-        }
-      // }
-  }
-  cout << "done" << endl;
-  *(n->colour) = B;
-}
+//           n = root;
+//         }
+//       // }
+//   }
+//   cout << "done" << endl;
+//   *(n->colour) = B;
+// }
 
 template<class T>
 node<T>* rbt<T>::getRoot() const{
@@ -529,12 +529,6 @@ node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
   }
 
   return n;
-}
-
-
-template<class T>
-int rbt<T>::bh(node<T>* n) const{
-  return 0;//dummy
 }
 
 template<class T>

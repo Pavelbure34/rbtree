@@ -48,7 +48,7 @@ public:
     bool empty() const;                            //returns true if empty
     T* get(T item) const;                          //returns the pointer to value
     void insert(T* item);                          //insert the item
-    void remove(T &item);                          //remove the item
+    // void remove(T &item);                          //remove the item
 
     T* succ(T* key) const;                         //get the successor
     T* predec(T* key) const;                       //get the predecessor
@@ -59,21 +59,20 @@ public:
 
     void operator=(rbt<T> &tree);                  //assignment operator
     node<T>* getRoot() const;                      //returns the root
-    int bh(node<T>* n) const;                      //returns the black height
 
 protected:
     void insert_fix(node<T>* n);                   //helper function for insert
-    void remove_fix(node<T>* n);                   //helper function for remove
+    // void remove_fix(node<T>* n);                   //helper function for remove
     void rightRotate(node<T> *n);                  //right rotate the tree
     void leftRotate(node<T> *n);                   //left rotate the tree
-    void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
+    // void rbt_transplant(node<T> *u, node<T> *v);   //transplant tree
 
     T* max(node<T>* n) const;                      //get the maximum item
     T* min(node<T>* n) const;                      //get the minimum item
 
-    string getInOrder(node<T>* x) const;
-    string getPreOrder(node<T> *x) const;
-    string getPostOrder(node<T> *x) const;
+    string getInOrder(node<T>* x) const;           //helper function for inOrder
+    string getPreOrder(node<T> *x) const;          //helper function for preOrder
+    string getPostOrder(node<T> *x) const;         //helper function for postOrder
 
     void destroy(node<T> *n);                     //helper function for clearing memory.
     void deepCopy(node<T> *n);                    //helper function for copy
