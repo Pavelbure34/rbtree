@@ -297,14 +297,16 @@ void rbt<T>::remove_fix(node<T>* n){
       1. tree should be initiated.
       2. n should not be null.
   */
+  node<T> *w;
+  bool w_l_colour, w_r_colour, n_p_colour, n_colour; 
   while (n != root && *(n->colour) == B){
-    node<T> *w;
-    bool w_l_colour, w_r_colour, n_p_colour; 
-    if (n->p != NULL)
-      if (n->p->l != NULL){//null pointer possible
+    // if (n->p != NULL)
+    //   if (n->p->l != NULL){//null pointer possible
         if (n == n->p->l){
+          cout << "a" << endl;
           w = n->p->r;
           if (*(w->colour) == R){                         //case 1:
+            cout << "case 1" << endl;
             *(w->colour) = B;
             *(n->p->colour) = R;
             leftRotate(n->p);
@@ -313,17 +315,21 @@ void rbt<T>::remove_fix(node<T>* n){
           w_l_colour = (w->l == NULL)?B:*(w->l->colour);
           w_r_colour = (w->r == NULL)?B:*(w->r->colour);
           if (w_l_colour == B && w_r_colour == B){        //case 2:
+            cout << "case 2" << endl;
             *(w->colour) == R;
             n = n->p;
           }else if (w_r_colour == B){                     //case 3:
-            *(w->l->colour) = B;
+            cout << "case 3" << endl;
+            if (w->l != NULL)
+              *(w->l->colour) = B;
             *(w->colour) == R;
             rightRotate(w);
             w = (n->p == NULL)?n->r:n->p->r;
           }
       
-          n_p_colour = (n->p == NULL)?*B:(n->p->colour);
+          n_p_colour = (n->p == NULL)?B:*(n->p->colour);
           *(w->colour) == n_p_colour;                     //case 4:
+          cout << "case 4" << endl;
           if (n->p != NULL)
             *(n->p->colour) = B;
           if (w->r != NULL)
@@ -333,11 +339,45 @@ void rbt<T>::remove_fix(node<T>* n){
 
           n = root;
         }else{
+          cout << "b" << endl;
+          w = n->p->l;
+          if (*(w->colour) == R){                         //case 1:
+            cout << "case 1" << endl;
+            *(w->colour) = B;
+            *(n->p->colour) = R;
+            rightRotate(n->p);
+            w = x->p->l;
+          }
+          w_l_colour = (w->l == NULL)?B:*(w->l->colour);
+          w_r_colour = (w->r == NULL)?B:*(w->r->colour);
+          if (w_l_colour == B && w_r_colour == B){        //case 2:
+            cout << "case 2" << endl;
+            *(w->colour) == R;
+            n = n->p;
+          }else if (w_l_colour == B){                     //case 3:
+            cout << "case 3" << endl;
+            if (w->r != NULL)
+              *(w->r->colour) = B;
+            *(w->colour) == R;
+            leftRotate(w);
+            w = (n->p == NULL)?n->l:n->p->l;
+          }
+      
+          n_p_colour = (n->p == NULL)?B:*(n->p->colour);
+          *(w->colour) == n_p_colour;                     //case 4:
+          cout << "case 4" << endl;
+          if (n->p != NULL)
+            *(n->p->colour) = B;
+          if (w->l != NULL)
+            *(w->l->colour) = B;
+          if (n->p != NULL)
+            rightRotate(n->p);
 
+          n = root;
         }
-      }
+      // }
   }
-
+  cout << "done" << endl;
   *(n->colour) = B;
 }
 
