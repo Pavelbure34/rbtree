@@ -7,16 +7,8 @@
 
 template<class T>//constructor #3
 node<T>::node(T* item, bool *colour, node<T>* p, node<T>* r, node<T>* l){
-    if (item != NULL)
-      key = new T(*item);
-    else
-      key = NULL;
-
-    if (colour != NULL)
-      this->colour = new bool(*colour);
-    else
-      this->colour = new bool;
-
+    this->colour = (colour != NULL)?new bool(*colour):new bool;
+    this->key = (item != NULL)?new T(*item):NULL;
     this->p = p;
     this->r = r;
     this->l = l;
@@ -28,21 +20,13 @@ string node<T>::toStr() const{
     this function prints out node element.
     Pre-Condition:node has to be not-null
   */
-  string col = (*colour == R)?"r":"b";
-  string str = (key != NULL)? to_string(*key) + ":" + col : "";
-  return str;
-}
+  stringstream s;
+  string str, col;
 
-template<>
-string node<string>::toStr() const{
-  /*
-    this function prints out node element.
-    This is special overload for string data type.
-
-    Pre-Condition:node has to be not-null
-  */
-  string col = (*colour == R)?"r":"b";
-  string str = (key != NULL)? *key + ":" + col : "";
+  col = (*colour == R)?"r":"b";
+  s << *key << ":" << col << "";
+  
+  s >> str;
   return str;
 }
 
@@ -67,7 +51,7 @@ bool rbt<T>::empty() const{
   /*
     this function checks if rbt is empty or not.
   */
-  return root == NULL;
+  return this->root == NULL;
 }
 
 template<class T>
@@ -77,12 +61,9 @@ T* rbt<T>::get(T item) const{
 
     PreCondition: tree has to be initialized.
   */
-  if (root == NULL)
-    throw new emptyTreeException;
-
   node<T> *temp = getNode(root, &item);
   if (temp == NULL)
-    throw new noKeyException;
+    throw new KeyError;
 
   return temp->key;
 }

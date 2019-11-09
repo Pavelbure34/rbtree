@@ -45,9 +45,9 @@ void test_node_constructors_toStr(){
 
   //tesing toStr()
   assert(in4.toStr() == "10:r");
-  assert(dn4.toStr() == "10.000000:b");
-  assert(fn4.toStr() == "11.000000:r");
-  assert(cn4.toStr() == "97:b");
+  assert(dn4.toStr() == "10:b");
+  assert(fn4.toStr() == "11:r");
+  assert(cn4.toStr() == "a:b");
   assert(sn4.toStr() == "Hello:r");
 
   //if no error, detstructor has been working fine at this point.
@@ -210,19 +210,19 @@ void test_rbt_get(){
   //testing get on empty tree to produce an exception
   try{
     it.get(10);
-  }catch(emptyTreeException *e){}
+  }catch(KeyError *e){}
   try{
     dt.get(10.0);
-  }catch(emptyTreeException *e){}
+  }catch(KeyError *e){}
   try{
     ft.get(10.0f);
-  }catch(emptyTreeException *e){}
+  }catch(KeyError *e){}
   try{
     ct.get('a');
-  }catch(emptyTreeException *e){}
+  }catch(KeyError *e){}
   try{
     st.get("10");
-  }catch(emptyTreeException *e){}
+  }catch(KeyError *e){}
 
   assert(it.empty());  //initial creation has to be empty
   assert(dt.empty());
@@ -252,19 +252,19 @@ void test_rbt_get(){
   //testing get to throw noKeyException
   try{
     it.get(100);
-  }catch(noKeyException *e){}
+  }catch(KeyError *e){}
   try{
     dt.get(100.0);
-  }catch(noKeyException *e){}
+  }catch(KeyError *e){}
   try{
     ft.get(100.0f);
-  }catch(noKeyException *e){}
+  }catch(KeyError *e){}
   try{
     ct.get('c');
-  }catch(noKeyException *e){}
+  }catch(KeyError *e){}
   try{
     st.get("el");
-  }catch(noKeyException *e){}
+  }catch(KeyError *e){}
 
   assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
