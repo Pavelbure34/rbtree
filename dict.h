@@ -27,6 +27,12 @@ public:
         o << n.toString();
         return o;
     }
+
+    friend stringstream& operator<<(stringstream &s, h_pair<S, T> &n){
+        //this friend function enables stringsteam operator.
+        s << n.toString();
+        return s;
+    }
 };
 
 template<class T>

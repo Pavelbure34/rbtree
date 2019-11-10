@@ -6,8 +6,15 @@
 
 template<class S, class T>
 h_pair<S, T>::h_pair(S* key, T* value){
-    this->key = (key != NULL)?new S(*key):NULL;
-    this->value = (value != NULL)?new T(*value):NULL;
+    if (key != NULL)
+        this->key = new S(*key);
+    else
+        this->key = NULL;
+
+    if (value != NULL)
+        this->value = new T(*value);
+    else
+        this->value = NULL;
 }
 
 template<class S, class T>
@@ -46,10 +53,10 @@ string h_pair<S, T>::toString() const{
     string str;
 
     if (key != NULL && value != NULL)
-        s << "<" << *key << " : " << *value << ">";
+        s << "<" << *key << ":" << *value << ">";
     else
         s << "<:>";
-
+    
     s >> str;
     return str;
 }

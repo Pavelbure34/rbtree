@@ -7,11 +7,20 @@
 
 template<class T>//constructor #3
 node<T>::node(T* item, bool *colour, node<T>* p, node<T>* r, node<T>* l){
-    this->colour = (colour != NULL)?new bool(*colour):new bool;
-    this->key = (item != NULL)?new T(*item):NULL;
+    if (colour != NULL)
+      this->colour = new bool(*colour);
+    else
+      this->colour = new bool;
+
+    if (item != NULL)
+      this->key = new T(*item);
+    else
+      this->key = NULL;
+    
     this->p = p;
     this->r = r;
     this->l = l;
+    
 }
 
 template<class T>
@@ -83,11 +92,12 @@ void rbt<T>::insert(T* item){
       else
         x = x->r;
     }
-
+    
     //setting up new node z
     node<T>* z = new node<T>(item, new bool(R));
     z->p = (y != NULL)?y:NULL;
     z->r = z->l = NULL;
+    // cout << "hee" << endl;
     if (y == NULL)                                     //if empty tree
       root = z;                                        //z is root
     else if (*item < *(y->key)){                       //if item smaller than root
@@ -95,8 +105,8 @@ void rbt<T>::insert(T* item){
     }else{                                             //if bigger
       y->r = z;                                        //right tree
     }
-
-    insert_fix(z);                                     //fix up colour of tree
+    
+    insert_fix(z);                                     //fix up colour of tree  
 }
 
 template<class T>
@@ -158,7 +168,7 @@ void rbt<T>::insert_fix(node<T> *n){
     }
     n_p_colour = (n->p == NULL)?B:*(n->p->colour);//updating  n_p_colour
   }
-  // cout << "done" << endl;
+  
   *(root->colour) = B;                            //making the root as colour black
 }
 
