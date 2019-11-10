@@ -16,6 +16,7 @@ void readFile(string file, dictionary<h_pair<string, string>>& movies){
     int howMany = 0;
     string movieKey, movieValue;
     int i = 0;
+    int count = 0;
     while(getline(imdbFile, line, '\t')){
         if(howMany == 2)
             movieKey = line;
@@ -31,12 +32,12 @@ void readFile(string file, dictionary<h_pair<string, string>>& movies){
             if(adjustedValue == "\\N") { //check for movies without a genre
                 adjustedValue = "No Genre Available";
             }
-            h_pair<string, string> p(&movieKey, &adjustedValue);
-            movies.insert(&p);
-            if (movies.itemNum() == 500)
+            movies.insert(new h_pair<string, string>(&movieKey, &adjustedValue));
+            if (count == 500)
               break;
           }
         howMany ++;
+        count++;
     }
     imdbFile.close();
 }
