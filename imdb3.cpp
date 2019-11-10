@@ -32,6 +32,7 @@ void readFile(string file, dictionary<h_pair<string, string>>& movies){
             if(adjustedValue == "\\N") { //check for movies without a genre
                 adjustedValue = "No Genre Available";
             }
+            cout << "okay" << endl;
             movies.insert(new h_pair<string, string>(&movieKey, &adjustedValue));
             if (count == 500)
               break;
@@ -59,14 +60,12 @@ int main(int argc, char const *argv[]){
 
     string s = "";
     string g;
-    dictionary<h_pair<string, string>> movies(1000);
+    dictionary<h_pair<string, string>> movies;
 
     cout << "---------now loading-------" << endl;
     gettimeofday(&timeBefore, NULL);     //time count init
     readFile("data.tsv", movies);
     gettimeofday(&timeAfter, NULL);       //time count done
-
-    cout << movies.itemNum() << " entry successfully encoded" << endl;
 
     //calculating run time of encoding under hashTable based dictionary
     diffSeconds = timeAfter.tv_sec - timeBefore.tv_sec;
