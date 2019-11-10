@@ -32,9 +32,9 @@ void readFile(string file, dictionary<h_pair<string, string>>& movies){
             if(adjustedValue == "\\N") { //check for movies without a genre
                 adjustedValue = "No Genre Available";
             }
-            
+
             h_pair<string, string>n(&movieKey, &adjustedValue);
-            cout << n << endl;
+            //cout << n << endl;
             //it takes 4 input and crashes.
             //and n is not even accessible.
             //it seems insert is fine.
@@ -75,7 +75,7 @@ int main(int argc, char const *argv[]){
     //calculating run time of encoding under hashTable based dictionary
     diffSeconds = timeAfter.tv_sec - timeBefore.tv_sec;
     diffUSeconds = timeAfter.tv_usec - timeBefore.tv_usec;
-    o << "data.tsv with hashtable:" << diffSeconds + (diffUSeconds/1000000.0) << "\n";//writing on csv
+    o << "data.tsv with rbt:" << diffSeconds + (diffUSeconds/1000000.0) << "\n";//writing on csv
     o.close();
     //time calculated complete
 

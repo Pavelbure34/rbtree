@@ -16,11 +16,11 @@ node<T>::node(T* item, bool *colour, node<T>* p, node<T>* r, node<T>* l){
       this->key = new T(*item);
     else
       this->key = NULL;
-    
+
     this->p = p;
     this->r = r;
     this->l = l;
-    
+
 }
 
 template<class T>
@@ -34,7 +34,7 @@ string node<T>::toStr() const{
 
   col = (*colour == R)?"r":"b";
   s << *key << ":" << col << "";
-  
+
   s >> str;
   return str;
 }
@@ -61,6 +61,24 @@ bool rbt<T>::empty() const{
     this function checks if rbt is empty or not.
   */
   return this->root == NULL;
+}
+
+template<class T>
+node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
+  /*
+    this function recursively finds target node
+    that contains argument key.
+
+    Precondition: key should not null.
+  */
+    while(n != NULL && *key != *(n->key)){
+    if(*(n->key) < *key)
+      n = n->l;
+    else
+      n = n->r;
+    }
+
+  return n;
 }
 
 template<class T>
@@ -92,13 +110,12 @@ void rbt<T>::insert(T* item){
       else
         x = x->r;
     }
-    
+
     //setting up new node z
-    cout << "hee" << endl;
     node<T>* z = new node<T>(item, new bool(R));
     z->p = (y != NULL)?y:NULL;
     z->r = z->l = NULL;
-    
+
     if (y == NULL)                                     //if empty tree
       root = z;                                        //z is root
     else if (*item < *(y->key)){                       //if item smaller than root
@@ -106,8 +123,7 @@ void rbt<T>::insert(T* item){
     }else{                                             //if bigger
       y->r = z;                                        //right tree
     }
-    cout << "here" << endl;
-    insert_fix(z);                                     //fix up colour of tree  
+    insert_fix(z);                                     //fix up colour of tree
 }
 
 template<class T>
@@ -122,19 +138,21 @@ void rbt<T>::insert_fix(node<T> *n){
     bool y_colour;
     if (n->p == n->p->p->l){ //if parent equals to parent's uncle
       // cout << "a" << endl;
-      y = n->p->p->l;
+      y = n->p->p->r;
       y_colour = (y == NULL)?B:*(y->colour); //NULL pointer error protection
       if (y_colour == R){
-        // cout << "case 1" << endl;
+        //cout << "case 1" << endl;
         *(n->p->colour) = *(y->colour) = B;
         *(n->p->p->colour) = R;
         n = n->p->p;
-      }else if (n == n->p->r){
-        // cout << "case 2" << endl;
-        n = n->p;
-        leftRotate(n);
+      }else {
+        if (n == n->p->r){
+        //cout << "case 2" << endl;
+          n = n->p;
+          leftRotate(n);
       }
-      // cout << "case 3" << endl;
+
+      //cout << "case 3" << endl;
       if (n->p != NULL){           //NULL pointer error protection
         *(n->p->colour) = B;
         if (n->p->p != NULL){      //NULL pointer error protection
@@ -143,6 +161,7 @@ void rbt<T>::insert_fix(node<T> *n){
         }else
           rightRotate(n->p);
       }
+    }
     }else{
       // cout << "b" << endl;
       y = n->p->p->r;
@@ -152,10 +171,11 @@ void rbt<T>::insert_fix(node<T> *n){
         *(n->p->colour) = *(y->colour) = B;
         *(n->p->p->colour) = R;
         n = n->p->p;
-      }else if (n == n->p->l){
-        // cout << "case 2" << endl;
-        n = n->p;
-        rightRotate(n);
+      }else {
+        if (n == n->p->l){
+          // cout << "case 2" << endl;
+          n = n->p;
+          rightRotate(n);
       }
       // cout << "case 3" << endl;
      if (n->p != NULL){             //NULL pointer error protection
@@ -165,11 +185,13 @@ void rbt<T>::insert_fix(node<T> *n){
           leftRotate(n->p->p);
         }else
           leftRotate(n->p);
+        }
       }
     }
     n_p_colour = (n->p == NULL)?B:*(n->p->colour);//updating  n_p_colour
   }
-  
+
+
   *(root->colour) = B;                            //making the root as colour black
 }
 
@@ -209,7 +231,7 @@ void rbt<T>::leftRotate(node<T> *n){
   if(y->l != NULL)
     y->l->p = n;
   y->p = n->p;        //link parent of x to y's
-  
+
   if(n->p == NULL)
     root = y;
   else if(n == n->p->l)
@@ -278,7 +300,7 @@ void rbt<T>::leftRotate(node<T> *n){
 
 //   if (y_o_colour == B){
 //     remove_fix(x);
-//   } 
+//   }
 // }
 
 // template<class T>
@@ -290,7 +312,7 @@ void rbt<T>::leftRotate(node<T> *n){
 //       2. n should not be null.
 //   */
 //   node<T> *w;
-//   bool w_l_colour, w_r_colour, n_p_colour, n_colour; 
+//   bool w_l_colour, w_r_colour, n_p_colour, n_colour;
 //   while (n != root && *(n->colour) == B){
 //     // if (n->p != NULL)
 //     //   if (n->p->l != NULL){//null pointer possible
@@ -318,7 +340,7 @@ void rbt<T>::leftRotate(node<T> *n){
 //             rightRotate(w);
 //             w = (n->p == NULL)?n->r:n->p->r;
 //           }
-      
+
 //           n_p_colour = (n->p == NULL)?B:*(n->p->colour);
 //           *(w->colour) == n_p_colour;                     //case 4:
 //           cout << "case 4" << endl;
@@ -354,7 +376,7 @@ void rbt<T>::leftRotate(node<T> *n){
 //             leftRotate(w);
 //             w = (n->p == NULL)?n->l:n->p->l;
 //           }
-      
+
 //           n_p_colour = (n->p == NULL)?B:*(n->p->colour);
 //           *(w->colour) == n_p_colour;                     //case 4:
 //           cout << "case 4" << endl;
@@ -505,23 +527,7 @@ T* rbt<T>::predec(T* key) const{
   return y->key;
 }
 
-template<class T>
-node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
-  /*
-    this function recursively finds target node
-    that contains argument key.
 
-    Precondition: key should not null.
-  */
-  while(n != NULL && *key != *(n->key)){
-    if(*(n->key) < *key)
-      n = n->r;
-    else
-      n = n->l;
-  }
-
-  return n;
-}
 
 template<class T>
 string rbt<T>::getInOrder(node<T>* x) const{
