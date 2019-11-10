@@ -57,7 +57,8 @@ void test_dict(){
         )
     );
 
-    dict2 = dict;        
+    dict2 = dict;
+    cout << dict2.preOrder() << endl;        
     assert(!dict2.empty());
     assert(dict2.preOrder() == dict.preOrder());
     //reaching here, assignment operator is working fine for non empty tree.

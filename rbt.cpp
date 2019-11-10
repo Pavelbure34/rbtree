@@ -94,10 +94,11 @@ void rbt<T>::insert(T* item){
     }
     
     //setting up new node z
+    cout << "hee" << endl;
     node<T>* z = new node<T>(item, new bool(R));
     z->p = (y != NULL)?y:NULL;
     z->r = z->l = NULL;
-    // cout << "hee" << endl;
+    
     if (y == NULL)                                     //if empty tree
       root = z;                                        //z is root
     else if (*item < *(y->key)){                       //if item smaller than root
@@ -105,7 +106,7 @@ void rbt<T>::insert(T* item){
     }else{                                             //if bigger
       y->r = z;                                        //right tree
     }
-    
+    cout << "here" << endl;
     insert_fix(z);                                     //fix up colour of tree  
 }
 

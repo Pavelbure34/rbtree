@@ -49,15 +49,31 @@ bool h_pair<S, T>::operator<=(h_pair<S, T> &node) const{
 
 template<class S, class T>
 string h_pair<S, T>::toString() const{
-    stringstream s;
+    // stringstream s;
+    // string k, v;
     string str;
 
     if (key != NULL && value != NULL)
-        s << "<" << *key << ":" << *value << ">";
+        str = "<" + to_string(*key) + ":" + to_string(*value) + ">";
     else
-        s << "<:>";
+        str = "<:>";
     
-    s >> str;
+    // s >> str;
+    return str;
+}
+
+template<>
+string h_pair<string, string>::toString() const{
+    // stringstream s;
+    // string k, v;
+    string str;
+
+    if (key != NULL && value != NULL)
+        str = "<" + *key + ":" + *value + ">";
+    else
+        str = "<:>";
+    
+    // s >> str;
     return str;
 }
 

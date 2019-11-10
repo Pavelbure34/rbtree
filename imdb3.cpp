@@ -32,8 +32,13 @@ void readFile(string file, dictionary<h_pair<string, string>>& movies){
             if(adjustedValue == "\\N") { //check for movies without a genre
                 adjustedValue = "No Genre Available";
             }
-            cout << "okay" << endl;
-            movies.insert(new h_pair<string, string>(&movieKey, &adjustedValue));
+            
+            h_pair<string, string>n(&movieKey, &adjustedValue);
+            cout << n << endl;
+            //it takes 4 input and crashes.
+            //and n is not even accessible.
+            //it seems insert is fine.
+            movies.insert(&n);
             if (count == 500)
               break;
           }
@@ -54,7 +59,7 @@ string getMovieGenre(dictionary<h_pair<string, string>> movies, string s){
 
 int main(int argc, char const *argv[]){
     ofstream o;
-    o.open("hashtableTime.txt");
+    o.open("rbtTime.txt");
     timeval timeBefore, timeAfter;          //time variables
     long diffSeconds, diffUSeconds;
 
