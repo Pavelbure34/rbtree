@@ -34,16 +34,12 @@ void readFile(string file, dictionary<h_pair<string, string>>& movies){
             }
 
             h_pair<string, string>n(&movieKey, &adjustedValue);
-            //cout << n << endl;
-            //it takes 4 input and crashes.
-            //and n is not even accessible.
-            //it seems insert is fine.
             movies.insert(&n);
-            if (count == 500)
-              break;
+            // if (count == 500)
+            //   break;
           }
         howMany ++;
-        count++;
+        // count++;
     }
     imdbFile.close();
 }

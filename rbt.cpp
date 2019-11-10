@@ -71,14 +71,14 @@ node<T>* rbt<T>::getNode(node<T>* n, T* key) const{
 
     Precondition: key should not null.
   */
-    while(n != NULL && *key != *(n->key)){
-    if(*(n->key) < *key)
-      n = n->l;
-    else
-      n = n->r;
-    }
+  // cout << *n << endl;
+  if (*(n->key) == *key || n == NULL)
+    return n;
 
-  return n;
+  if (*(n->key) < *key)
+    getNode(n->r, key);
+  else
+    getNode(n->l, key);
 }
 
 template<class T>
@@ -88,11 +88,19 @@ T* rbt<T>::get(T item) const{
 
     PreCondition: tree has to be initialized.
   */
-  node<T> *temp = getNode(root, &item);
-  if (temp == NULL)
-    throw new KeyError;
+  node<T> *temp = root;
+  while (temp != NULL){
+    // cout << *temp << endl;
+    if (*temp->key == item)
+      return temp->key;
 
-  return temp->key;
+    if (*(temp->key) < item)
+      temp = temp->r;
+    else
+      temp = temp->l;
+  }
+
+  throw new KeyError;
 }
 
 template<class T>

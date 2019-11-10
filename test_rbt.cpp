@@ -23,21 +23,21 @@ void test_node_constructors_toStr(){
   node<string> sn1;
 
   //testing giving key
-  node<int> in2(new int(10));    
+  node<int> in2(new int(10));
   node<double> dn2(new double(10.0));
   node<float> fn2(new float(11.0f));
   node<char> cn2(new char('a'));
   node<string> sn2(new string("Hello"));
 
   //testing key, colour
-  node<int> in3(new int(10), new bool(R));    
+  node<int> in3(new int(10), new bool(R));
   node<double> dn3(new double(10.0), new bool(B));
   node<float> fn3(new float(11.0f), new bool(R));
   node<char> cn3(new char('a'), new bool(B));
   node<string> sn3(new string("Hello"), new bool(R));
 
   //testing everything
-  node<int> in4(new int(10), new bool(R), &in1, &in2, &in3);    
+  node<int> in4(new int(10), new bool(R), &in1, &in2, &in3);
   node<double> dn4(new double(10.0), new bool(B), &dn1, &dn2, &dn3);
   node<float> fn4(new float(11.0f), new bool(R), &fn1, &fn2, &fn3);
   node<char> cn4(new char('a'), new bool(B), &cn1, &cn2, &cn3);
@@ -135,7 +135,7 @@ void test_rbt_insert(){
   // cout << ft.preOrder() << endl;
   // cout << ct.preOrder() << endl;
   // cout << st.preOrder() << endl;
-  
+
   assert(!it.empty());  //after insertion it has not to be empty
   assert(!dt.empty());
   assert(!ft.empty());
@@ -149,7 +149,7 @@ void test_rbt_assingment(){
   rbt<float> ft3;
   rbt<char> ct3;
   rbt<string> st3;
-  
+
   assert(it3.empty()); //making it sure it is emtpy
   assert(dt3.empty());
   assert(ft3.empty());
@@ -274,23 +274,11 @@ void test_rbt_get(){
 }
 
 int main(int argc, char const *argv[]) {
-  // //fixing it right
-  // rbt<int> it;
-  // int iArr[6] = {41, 38, 31, 12, 19, 8};
-
-  // for (int i = 0;i < 6; i++){
-  //   it.insert(iArr + i);
-  //   assert(*it.get(iArr[i]) == iArr[i]); 
-  // }
-
-  // //testing colour of the node,
-  // cout << it.preOrder() << endl;
- 
   LOG1("RBT class test init");
   test_node_constructors_toStr();  //test node constructor, destructor and toStr;
   test_rbt_constructors();         //testing rbt constructor
   test_rbt_insert();               //testing insert
-  test_rbt_get();                  //testing get         
+  test_rbt_get();                  //testing get
   test_rbt_assingment();           //testing assignment operator
   LOG1("RBT class test complete");
   return 0;
